@@ -48,7 +48,7 @@ void load() {
     // Disp matrix
     //cout << I ;
 
-    // Mean face
+    // Compute mean face
     vpColVector mean(iheight * iwidth);
     for (int face = 0; face < I.getCols(); face++) 
         for (int i = 0; i < iheight * iwidth; i++)
@@ -56,6 +56,12 @@ void load() {
 
     mean /= nbFaces * nbPicsPerFace;
 
+    // Disp mean face
+    for (int i = 0; i < iwidth; i++)
+        for (int j = 0; j < iheight; j++)
+            im[i][j] = mean[j*iheight+i] * 255;
+
+    vpImageIo::writePGM(im, "test.pgm");
 }
 
 void loadImage(vpImage<unsigned char> & I, int visage, int image) {
