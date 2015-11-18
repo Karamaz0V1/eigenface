@@ -45,12 +45,16 @@ void load() {
                     I[i * iwidth + j][f * nbPicsPerFace + pf] = im(i, j) / 255.0;
         }
 
-    //
-    for (int i = 0; i < I.getCols(); i++) {
-        for (int j = 0; j < I.getRows(); j++)
-            cout << I[i][j] << ' ';
-        cout << endl;
-    }
+    // Disp matrix
+    //cout << I ;
+
+    // Mean face
+    vpColVector mean(iheight * iwidth);
+    for (int face = 0; face < I.getCols(); face++) 
+        for (int i = 0; i < iheight * iwidth; i++)
+            mean[i] = I[i][face];
+
+    mean /= nbFaces * nbPicsPerFace;
 
 }
 
