@@ -59,16 +59,26 @@ void load() {
 
     // Disp mean face
     for (int i = 0; i < iheight; i++)
-        for (int j = 0; j < iwidth; j++) {
+        for (int j = 0; j < iwidth; j++)
             im[i][j] = mean[i*iwidth+j] * 255;
-        }
-//            im[j][i] = 255;
 
     vpDisplayX disp(im, 10, 10, "mean face");
     vpDisplay::display(im);
     vpDisplay::flush(im);
+
+    // Face center
+    vpImageIo::writePGM(im, "moy.pgm");
+    vpImage<unsigned char> im40_1, im40_1c;
+    loadImage(im40_1, 40, 1);
+    //vpMatrix c127(iwidth, iheight, 127);
+    im40_1c = im40_1 - im;// + c127;
+    vpDisplayX disp0(im40_1, 10 + iwidth, 10, "face");
+    vpDisplay::display(im40_1);
+    vpDisplay::flush(im40_1);
+    vpDisplayX disp1(im40_1c, 10 + 2 * iwidth, 10, "center face");
+    vpDisplay::display(im40_1c);
+    vpDisplay::flush(im40_1c);
     vpDisplay::getClick(im);
-    vpImageIo::writePGM(im, "test.pgm");
 }
 
 void loadImage(vpImage<unsigned char> & I, int visage, int image) {

@@ -10,9 +10,11 @@ ENDIF(VISP_FOUND)
 
 SET(SRC 
     main.cpp
+    kvisp.cpp
     )
 
 SET(HDR
+    kvisp.h
     )
 
 ADD_EXECUTABLE(${PROJECT_NAME} ${SRC} ${HDR})
