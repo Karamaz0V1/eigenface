@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <visp/vpImageIo.h>
+#include <visp/vpDisplayX.h>
 #define IMGDIR "../"
 using namespace std;
 
@@ -40,8 +41,8 @@ void load() {
     for (int f = 0; f < nbFaces; f++) 
         for (int pf = 0; pf < nbPicsPerFace; pf++) {
             loadImage(im, f + 1, pf + 1);
-            for (int j = 0; j < iheight; j++)
-                for (int i = 0; i < iwidth; i++)
+            for (int j = 0; j < iwidth; j++)
+                for (int i = 0; i < iheight; i++)
                     I[i * iwidth + j][f * nbPicsPerFace + pf] = im(i, j) / 255.0;
         }
 
@@ -52,15 +53,21 @@ void load() {
     vpColVector mean(iheight * iwidth);
     for (int face = 0; face < I.getCols(); face++) 
         for (int i = 0; i < iheight * iwidth; i++)
-            mean[i] = I[i][face];
+            mean[i] += I[i][face];
 
     mean /= nbFaces * nbPicsPerFace;
 
     // Disp mean face
-    for (int i = 0; i < iwidth; i++)
-        for (int j = 0; j < iheight; j++)
-            im[i][j] = mean[j*iheight+i] * 255;
+    for (int i = 0; i < iheight; i++)
+        for (int j = 0; j < iwidth; j++) {
+            im[i][j] = mean[i*iwidth+j] * 255;
+        }
+//            im[j][i] = 255;
 
+    vpDisplayX disp(im, 10, 10, "mean face");
+    vpDisplay::display(im);
+    vpDisplay::flush(im);
+    vpDisplay::getClick(im);
     vpImageIo::writePGM(im, "test.pgm");
 }
 
