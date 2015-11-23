@@ -9,6 +9,7 @@
 #include <iostream>
 #include <visp/vpImageIo.h>
 #include <visp/vpDisplayX.h>
+#include "kvisp.h"
 #define IMGDIR "../"
 using namespace std;
 
@@ -65,6 +66,14 @@ void load() {
     vpDisplayX disp(im, 10, 10, "mean face");
     vpDisplay::display(im);
     vpDisplay::flush(im);
+
+    vpMatrix imat;
+    vpImageToVpMatrix(im, imat);
+
+    cout << (int)im[0][0] << endl ;
+    cout << imat[0][0] << endl ;
+    cout << imat;
+
 
     // Face center
     vpImageIo::writePGM(im, "moy.pgm");
