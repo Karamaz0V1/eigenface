@@ -23,7 +23,7 @@ class Eigenfaces {
 
     private:
         vpMatrix _faces;
-        vpColVector _meanFace;
+        vpMatrix _meanFace;
         std::string _dbUrl;
         int _iwidth, _iheight; // db images size
 };

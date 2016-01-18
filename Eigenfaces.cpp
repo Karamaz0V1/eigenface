@@ -35,20 +35,17 @@ Eigenfaces::Eigenfaces(const std::string & dbUrl, int numberOfFaces, int numberO
         }
 
     // Calculate mean face
-    _meanFace = vpColVector(_iheight * _iwidth);
+    vpColVector colMeanFace(_iheight * _iwidth);
     for (int face = 0; face < _faces.getCols(); face++) 
         for (int i = 0; i < _iheight * _iwidth; i++)
-            _meanFace[i] += _faces[i][face];
+            colMeanFace[i] += _faces[i][face];
 
-    _meanFace /= numberOfFaces * numberOfImagesPerFace;
+    colMeanFace /= numberOfFaces * numberOfImagesPerFace;
+    _meanFace = colMeanFace.reshape(_iheight, _iwidth);
 }
 
 void Eigenfaces::getMeanFace(vpImage<unsigned char> & meanFace) const {
-    meanFace = vpImage<unsigned char>(_iheight, _iwidth);
-
-    for (int i = 0; i < _iheight; i++)
-        for (int j = 0; j < _iwidth; j++)
-            meanFace[i][j] = _meanFace[i*_iwidth+j] * 255;
+    vpMatrixToVpImage(_meanFace, meanFace);
 }
 
 void Eigenfaces::getFace(vpImage<unsigned char> & face, int visage, int image) const {
@@ -63,6 +60,9 @@ void Eigenfaces::getCenterFace(vpImage<unsigned char> & centerFace, int visage, 
 
     loadImage(face, visage, image);
     vpImageToVpMatrix(face, mface);
+
+    vpMatrix mcenterFace = mface - _meanFace;
+
 }
 
 void Eigenfaces::loadImage(vpImage<unsigned char> & I, int visage, int image) const {
