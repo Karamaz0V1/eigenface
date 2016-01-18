@@ -74,4 +74,8 @@ void Eigenfaces::initMeanFace() {
 
     rmean /= _faces.getRows();
     _meanFace = rmean.reshape(_iheight, _iwidth);
+
+    //for (int i = 0; i < _iheight; i++)
+    //    for (int j = 0; j < _iwidth; j++)
+    //        _meanFace[i][j] = rmean[i*_iwidth+j];
 }

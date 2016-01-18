@@ -16,6 +16,8 @@ using namespace std;
 
 void load();
 void loadImage(vpImage<unsigned char> & I, int visage, int image);
+void demo_visp_broken();
+void demo_visp_broken2();
 
 int main( int argc, char* argv[] )
 {
@@ -42,6 +44,43 @@ int main( int argc, char* argv[] )
     vpDisplay::getClick(imean);
 
     return 0;
+}
+
+void demo_visp_broken() {
+    int var;
+    vpMatrix mat(3, 4);
+    for (int i = 0; i < 3; i++)
+        for (int j = 0; j < 4; j++)
+            mat[i][j] = ++var;
+
+    cout << mat << endl;
+
+    vpRowVector row = mat.stackRows();
+
+    cout << row << endl;
+
+    vpMatrix remat = row.reshape(3, 4);
+
+    cout << remat << endl;
+}
+
+void demo_visp_broken2() {
+    int var;
+    vpMatrix test(3, 4);
+    for (int i = 0; i < 3; i++)
+        for (int j = 0; j < 4; j++) {
+            test[i][j] = ++var;
+        }
+
+    cout << test << endl;
+
+    vpColVector col = test.stackColumns();
+
+    cout << col << endl;
+
+    vpMatrix retest = col.reshape(3, 4);
+
+    cout << retest << endl;
 }
 
 void load() {
