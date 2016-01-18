@@ -31,5 +31,8 @@ vpImagePoint vpColVectorToVpImagePoint(const vpColVector & vect) {
 
 void vpImageToVpMatrix(const vpImage<unsigned char> & image, vpMatrix & matrix) {
     matrix = vpMatrix(image.getHeight(), image.getWidth());
-    std::memcpy(matrix.data, image.bitmap, image.getHeight() * image.getWidth());
+    //std::memcpy(matrix.data, image.bitmap, image.getHeight() * image.getWidth());
+    for (int i = 0; i < image.getHeight(); i ++)
+        for (int j = 0; j < image.getWidth(); j++)
+            matrix[i][j] = image(i, j);
 }

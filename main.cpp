@@ -10,7 +10,7 @@
 #include <visp/vpImageIo.h>
 #include <visp/vpDisplayX.h>
 #include "kvisp.h"
-#define IMGDIR "../"
+#define IMGDIR "../img/"
 using namespace std;
 
 void load();
@@ -63,17 +63,12 @@ void load() {
         for (int j = 0; j < iwidth; j++)
             im[i][j] = mean[i*iwidth+j] * 255;
 
-    vpDisplayX disp(im, 10, 10, "mean face");
+    vpDisplayX disp(im, 1000, 100, "mean face");
     vpDisplay::display(im);
     vpDisplay::flush(im);
 
     vpMatrix imat;
     vpImageToVpMatrix(im, imat);
-
-    cout << (int)im[0][0] << endl ;
-    cout << imat[0][0] << endl ;
-    cout << imat;
-
 
     // Face center
     vpImageIo::writePGM(im, "moy.pgm");
@@ -81,10 +76,10 @@ void load() {
     loadImage(im40_1, 40, 1);
     //vpMatrix c127(iwidth, iheight, 127);
     im40_1c = im40_1 - im;// + c127;
-    vpDisplayX disp0(im40_1, 10 + iwidth, 10, "face");
+    vpDisplayX disp0(im40_1, 1000 + iwidth, 100, "face");
     vpDisplay::display(im40_1);
     vpDisplay::flush(im40_1);
-    vpDisplayX disp1(im40_1c, 10 + 2 * iwidth, 10, "center face");
+    vpDisplayX disp1(im40_1c, 1000 + 2 * iwidth, 100, "center face");
     vpDisplay::display(im40_1c);
     vpDisplay::flush(im40_1c);
     vpDisplay::getClick(im);
