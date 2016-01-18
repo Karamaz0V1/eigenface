@@ -26,6 +26,9 @@ class Eigenfaces {
         vpMatrix _meanFace;
         std::string _dbUrl;
         int _iwidth, _iheight; // db images size
+
+    private:
+        void initMeanFace();
 };
 
 #endif /* __EIGENFACES_H__ */

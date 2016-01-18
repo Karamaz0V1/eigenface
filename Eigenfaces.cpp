@@ -16,32 +16,28 @@ using namespace std;
 Eigenfaces::Eigenfaces(const std::string & dbUrl, int numberOfFaces, int numberOfImagesPerFace) :
     _dbUrl(dbUrl) 
 {
-    // Load files specs
+    // Get image specs
     vpImage<unsigned char> im;
     loadImage(im, 1, 1);
     _iheight = im.getHeight();
     _iwidth = im.getWidth();
 
-    // Build matrix
-    _faces = vpMatrix(_iheight * _iwidth, numberOfImagesPerFace * numberOfFaces);
-
     // Load matrix
-    for (int f = 0; f < numberOfFaces; f++) 
-        for (int pf = 0; pf < numberOfImagesPerFace; pf++) {
-            loadImage(im, f + 1, pf + 1);
-            for (int j = 0; j < _iwidth; j++)
-                for (int i = 0; i < _iheight; i++)
-                    _faces[i * _iwidth + j][f * numberOfImagesPerFace + pf] = im(i, j) / 255.0;
+    for (int f = 1; f <= numberOfFaces; f++)
+        for (int pf = 1; pf <= numberOfImagesPerFace; pf++) {
+            cout << "Loading face " << f << " expression " << pf << endl;
+            vpImage<unsigned char> imface;
+            loadImage(imface, f, pf);
+
+            vpMatrix mimface;
+            vpImageToVpMatrix(imface, mimface);
+
+            _faces.stack(mimface.stackRows());
         }
+    cout << numberOfImagesPerFace * numberOfFaces << " images in db" << endl;
 
     // Calculate mean face
-    vpColVector colMeanFace(_iheight * _iwidth);
-    for (int face = 0; face < _faces.getCols(); face++) 
-        for (int i = 0; i < _iheight * _iwidth; i++)
-            colMeanFace[i] += _faces[i][face];
-
-    colMeanFace /= numberOfFaces * numberOfImagesPerFace;
-    _meanFace = colMeanFace.reshape(_iheight, _iwidth);
+    initMeanFace();
 }
 
 void Eigenfaces::getMeanFace(vpImage<unsigned char> & meanFace) const {
@@ -62,11 +58,20 @@ void Eigenfaces::getCenterFace(vpImage<unsigned char> & centerFace, int visage, 
     vpImageToVpMatrix(face, mface);
 
     vpMatrix mcenterFace = mface - _meanFace;
-
 }
 
 void Eigenfaces::loadImage(vpImage<unsigned char> & I, int visage, int image) const {
     stringstream fileURL;
     fileURL << _dbUrl << "/s" << visage << "/" << image << ".pgm";
     vpImageIo::readPGM(I, fileURL.str());
+}
+
+void Eigenfaces::initMeanFace() {
+    vpRowVector rmean(_iwidth * _iheight);
+
+    for (int i = 0; i < _faces.getRows(); i++)
+        rmean += _faces.getRow(i);
+
+    rmean /= _faces.getRows();
+    _meanFace = rmean.reshape(_iheight, _iwidth);
 }
