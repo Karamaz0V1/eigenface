@@ -9,7 +9,8 @@
 #include <iostream>
 #include <visp/vpImageIo.h>
 #include <visp/vpDisplayX.h>
-#include "kvisp.h"
+#include <Eigenfaces.h>
+#include <kvisp.h>
 #define IMGDIR "../img/"
 using namespace std;
 
@@ -18,11 +19,23 @@ void loadImage(vpImage<unsigned char> & I, int visage, int image);
 
 int main( int argc, char* argv[] )
 {
-    int ret = 0;
-    
-    load();
+    Eigenfaces ef("../img", 40, 10);
 
-    return ret;
+    vpImage<uchar> imean;
+    ef.getMeanFace(imean);
+
+    vpImage<uchar> icenter;
+    ef.getCenterFace(icenter);
+
+    vpDisplayX disp0(imean, 1000, 100, "mean face");
+    vpDisplayX disp1(icenter, 1100, 100, "center face");
+    vpDisplay::display(imean);
+    vpDisplay::display(icenter);
+    vpDisplay::flush(imean);
+    vpDisplay::flush(icenter);
+    vpDisplay::getClick(imean);
+
+    return 0;
 }
 
 void load() {

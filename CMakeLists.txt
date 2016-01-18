@@ -8,13 +8,17 @@ IF(VISP_FOUND)
   INCLUDE(${VISP_USE_FILE})
 ENDIF(VISP_FOUND)
 
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+
 SET(SRC 
     main.cpp
     kvisp.cpp
+    Eigenfaces.cpp
     )
 
 SET(HDR
     kvisp.h
+    Eigenfaces.h
     )
 
 ADD_EXECUTABLE(${PROJECT_NAME} ${SRC} ${HDR})
