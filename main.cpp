@@ -24,14 +24,20 @@ int main( int argc, char* argv[] )
     vpImage<uchar> imean;
     ef.getMeanFace(imean);
 
+    vpImage<uchar> iface;
+    ef.getFace(iface);
+
     vpImage<uchar> icenter;
     ef.getCenterFace(icenter);
 
     vpDisplayX disp0(imean, 1000, 100, "mean face");
-    vpDisplayX disp1(icenter, 1100, 100, "center face");
+    vpDisplayX disp1(iface, 1100, 100, "face");
+    vpDisplayX disp2(icenter, 1200, 100, "center face");
     vpDisplay::display(imean);
+    vpDisplay::display(iface);
     vpDisplay::display(icenter);
     vpDisplay::flush(imean);
+    vpDisplay::flush(iface);
     vpDisplay::flush(icenter);
     vpDisplay::getClick(imean);
 

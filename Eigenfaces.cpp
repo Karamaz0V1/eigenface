@@ -51,6 +51,11 @@ void Eigenfaces::getMeanFace(vpImage<unsigned char> & meanFace) const {
             meanFace[i][j] = _meanFace[i*_iwidth+j] * 255;
 }
 
+void Eigenfaces::getFace(vpImage<unsigned char> & face, int visage, int image) const {
+    face = vpImage<unsigned char>(_iheight, _iwidth);
+    loadImage(face, visage, image);
+}
+
 void Eigenfaces::getCenterFace(vpImage<unsigned char> & centerFace, int visage, int image) const {
     centerFace = vpImage<unsigned char>(_iheight, _iwidth);
     vpImage<unsigned char> face;

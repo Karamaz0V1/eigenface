@@ -15,6 +15,7 @@ class Eigenfaces {
     public:
         Eigenfaces(const std::string & dbUrl, int numberOfFaces = 10, int numberOfImagesPerFace = 5);
         void getMeanFace(vpImage<unsigned char> & meanFace) const;
+        void getFace(vpImage<unsigned char> & face, int visage = 1, int image = 1) const;
         void getCenterFace(vpImage<unsigned char> & centerFace, int visage = 1, int image = 1) const;
 
     protected:
