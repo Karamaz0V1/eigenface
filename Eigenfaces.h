@@ -13,21 +13,23 @@
 
 class Eigenfaces {
     public:
-        Eigenfaces(const std::string & dbUrl, int numberOfFaces = 10, int numberOfImagesPerFace = 5);
+        Eigenfaces(const std::string & dbUrl, int numberOfSubjects = 10, int numberOfImages = 5);
         void getMeanFace(vpImage<unsigned char> & meanFace) const;
-        void getFace(vpImage<unsigned char> & face, int visage = 1, int image = 1) const;
+        void getFace(vpImage<unsigned char> & face, int subject = 1, int image = 1) const;
         void getCenterFace(vpImage<unsigned char> & centerFace, int visage = 1, int image = 1) const;
 
     protected:
-        void loadImage(vpImage<unsigned char> & I, int visage, int image) const;
+        void getFace(vpMatrix & face, int subject, int image) const;
 
     private:
         vpMatrix _faces;
         vpMatrix _meanFace;
         std::string _dbUrl;
         int _iwidth, _iheight; // db images size
+        int _nSubjects, _nImages;
 
     private:
+        void loadImage(vpImage<unsigned char> & I, int visage, int image) const;
         void initMeanFace();
 };
 

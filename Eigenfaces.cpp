@@ -13,8 +13,10 @@
 
 using namespace std;
 
-Eigenfaces::Eigenfaces(const std::string & dbUrl, int numberOfFaces, int numberOfImagesPerFace) :
-    _dbUrl(dbUrl) 
+Eigenfaces::Eigenfaces(const std::string & dbUrl, int numberOfSubjects, int numberOfImages) :
+    _dbUrl(dbUrl), 
+    _nSubjects(numberOfSubjects),
+    _nImages(numberOfImages)
 {
     // Get image specs
     vpImage<unsigned char> im;
@@ -23,8 +25,8 @@ Eigenfaces::Eigenfaces(const std::string & dbUrl, int numberOfFaces, int numberO
     _iwidth = im.getWidth();
 
     // Load matrix
-    for (int f = 1; f <= numberOfFaces; f++)
-        for (int pf = 1; pf <= numberOfImagesPerFace; pf++) {
+    for (int f = 1; f <= numberOfSubjects; f++)
+        for (int pf = 1; pf <= numberOfImages; pf++) {
             cout << "Loading face " << f << " expression " << pf << endl;
             vpImage<unsigned char> imface;
             loadImage(imface, f, pf);
@@ -34,7 +36,7 @@ Eigenfaces::Eigenfaces(const std::string & dbUrl, int numberOfFaces, int numberO
 
             _faces.stack(mimface.stackRows());
         }
-    cout << numberOfImagesPerFace * numberOfFaces << " images in db" << endl;
+    cout << numberOfImages * numberOfSubjects << " images in db" << endl;
 
     // Calculate mean face
     initMeanFace();
@@ -44,9 +46,14 @@ void Eigenfaces::getMeanFace(vpImage<unsigned char> & meanFace) const {
     vpMatrixToVpImage(_meanFace, meanFace);
 }
 
-void Eigenfaces::getFace(vpImage<unsigned char> & face, int visage, int image) const {
-    face = vpImage<unsigned char>(_iheight, _iwidth);
-    loadImage(face, visage, image);
+void Eigenfaces::getFace(vpImage<unsigned char> & face, int subject, int image) const {
+    vpMatrix mface;
+    getFace(mface, subject, image);
+    vpMatrixToVpImage(mface, face);
+}
+
+void Eigenfaces::getFace(vpMatrix & face, int subject, int image) const {
+    face = _faces.getRow((subject - 1) * _nSubjects + image - 1).reshape(_iheight, _iwidth);
 }
 
 void Eigenfaces::getCenterFace(vpImage<unsigned char> & centerFace, int visage, int image) const {
@@ -74,8 +81,4 @@ void Eigenfaces::initMeanFace() {
 
     rmean /= _faces.getRows();
     _meanFace = rmean.reshape(_iheight, _iwidth);
-
-    //for (int i = 0; i < _iheight; i++)
-    //    for (int j = 0; j < _iwidth; j++)
-    //        _meanFace[i][j] = rmean[i*_iwidth+j];
 }
