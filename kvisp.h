@@ -17,5 +17,6 @@ vpColVector vpColVector4(const double x, const double y, const double z, const d
 vpImagePoint vpColVectorToVpImagePoint(vpColVector & vect);
 void vpImageToVpMatrix(const vpImage<unsigned char> & image, vpMatrix & matrix);
 void vpMatrixToVpImage(const vpMatrix & matrix, vpImage<unsigned char> & image);
+void vpMatrixNormalize(vpMatrix & matrix);
 
 #endif /* __KVISP_H__ */

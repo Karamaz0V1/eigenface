@@ -42,3 +42,15 @@ void vpMatrixToVpImage(const vpMatrix & matrix, vpImage<unsigned char> & image) 
         for (int j = 0; j < image.getWidth(); j++)
             image[i][j] = matrix[i][j] * 255;
 }
+
+void vpMatrixNormalize(vpMatrix & matrix) {
+    double min = matrix.data[0];
+    double max = matrix.data[0];
+
+    for (int i = 1; i < matrix.getRows() * matrix.getCols(); i++)
+        if (matrix.data[i] > max) max = matrix.data[i];
+        else if (matrix.data[i] < min) min = matrix.data[i];
+
+    for (int i = 0; i < matrix.getRows() * matrix.getCols(); i++)
+        matrix.data[i] = (matrix.data[i] - min) / (max - min);
+}

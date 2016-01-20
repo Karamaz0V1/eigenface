@@ -59,6 +59,7 @@ void Eigenfaces::getFace(vpMatrix & face, int subject, int image) const {
 void Eigenfaces::getCenterFace(vpImage<unsigned char> & centerFace, int subject, int image) const {
     vpMatrix mcenterFace;
     getCenterFace(mcenterFace, subject, image);
+    vpMatrixNormalize(mcenterFace);
     vpMatrixToVpImage(mcenterFace, centerFace);
 }
 
