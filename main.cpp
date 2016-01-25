@@ -28,7 +28,7 @@ Eigenfaces ef("../img", 40, 10);
 int main( int argc, char* argv[] )
 {
     q0();
-    q3();
+    //q3();
     q6();
 
     return 0;
@@ -79,21 +79,43 @@ void q6() {
     vpImage<uchar> imean;
     ef.getMeanFace(imean);
 
-    vpImage<uchar> ieface, ieface1, ieface2;
-    ef.getEigenface(ieface);
-    ef.getEigenface(ieface1, 10);
-    ef.getEigenface(ieface2, 20);
+    vpImage<uchar> ieface0, ieface1, ieface2, ieface3, ieface4, ieface5;
+    ef.getEigenface(ieface0);
+    ef.getEigenface(ieface1, 1, 2);
+    ef.getEigenface(ieface2, 1, 3);
+    ef.getEigenface(ieface3, 1, 4);
+    ef.getEigenface(ieface4, 1, 5);
+    ef.getEigenface(ieface5, 1, 6);
 
     vpDisplayX disp0(imean, 1000, 100, "mean face");
-    vpDisplayX disp1(ieface, 1100, 100, "eigenface 1");
-    vpDisplayX disp2(ieface1, 1200, 100, "eigenface 10");
+    vpDisplayX disp1(ieface0, 1100, 100, "eigenface 1");
+    vpDisplayX disp2(ieface1, 1200, 100, "eigenface 2");
+    vpDisplayX disp3(ieface2, 1300, 100, "eigenface 3");
+    vpDisplayX disp4(ieface3, 1400, 100, "eigenface 4");
+    vpDisplayX disp5(ieface4, 1500, 100, "eigenface 5");
+    vpDisplayX disp6(ieface5, 1600, 100, "eigenface 6");
     vpDisplay::display(imean);
-    vpDisplay::display(ieface);
+    vpDisplay::display(ieface0);
     vpDisplay::display(ieface1);
+    vpDisplay::display(ieface2);
+    vpDisplay::display(ieface3);
+    vpDisplay::display(ieface4);
+    vpDisplay::display(ieface5);
     vpDisplay::flush(imean);
-    vpDisplay::flush(ieface);
+    vpDisplay::flush(ieface0);
     vpDisplay::flush(ieface1);
+    vpDisplay::flush(ieface2);
+    vpDisplay::flush(ieface3);
+    vpDisplay::flush(ieface4);
+    vpDisplay::flush(ieface5);
     vpDisplay::getClick(imean);
+
+    vpImageIo::writePNG(ieface0, "eigenface_1.png");
+    vpImageIo::writePNG(ieface1, "eigenface_2.png");
+    vpImageIo::writePNG(ieface2, "eigenface_3.png");
+    vpImageIo::writePNG(ieface3, "eigenface_4.png");
+    vpImageIo::writePNG(ieface4, "eigenface_5.png");
+    vpImageIo::writePNG(ieface5, "eigenface_6.png");
 
     vpImage<uchar> U;
     ef.getU(U);
