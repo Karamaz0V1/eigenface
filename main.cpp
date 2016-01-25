@@ -37,6 +37,7 @@ int main( int argc, char* argv[] )
 void q0() {
     vpImage<uchar> A;
     ef.getA(A);
+    cout << "rows: " << A.getRows() << " cols: " << A.getCols() << endl;
     vpImageIo::writePNG(A, "all_images.png");
 }
 

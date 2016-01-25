@@ -36,6 +36,7 @@ Eigenfaces::Eigenfaces(const std::string & dbUrl, int numberOfSubjects, int numb
 
             _faces.stack(mimface.stackRows());
         }
+    _faces = _faces.t();
     cout << numberOfImages * numberOfSubjects << " images in db" << endl;
 
     // Calculate mean face
@@ -66,11 +67,11 @@ void Eigenfaces::getFace(vpImage<unsigned char> & face, int subject, int image) 
 }
 
 void Eigenfaces::getFace(vpMatrix & face, int subject, int image) const {
-    face = _faces.getRow((subject - 1) * _nImages + image - 1).reshape(_iheight, _iwidth);
+    face = _faces.getCol((subject - 1) * _nImages + image - 1).t().reshape(_iheight, _iwidth);
 }
 
 void Eigenfaces::getEigenface(vpMatrix & eigenface, int subject, int image) const {
-    eigenface = _eigenfaces.getRow((subject - 1) * _nImages + image - 1).reshape(_iheight, _iwidth);
+    eigenface = _eigenfaces.getCol((subject - 1) * _nImages + image - 1).t().reshape(_iheight, _iwidth);
 }
 
 void Eigenfaces::getCenterFace(vpImage<unsigned char> & centerFace, int subject, int image) const {
@@ -93,13 +94,13 @@ void Eigenfaces::loadImage(vpImage<unsigned char> & I, int visage, int image) co
 }
 
 void Eigenfaces::initMeanFace() {
-    vpRowVector rmean(_iwidth * _iheight);
+    vpColVector rmean(_iwidth * _iheight);
 
-    for (unsigned int i = 0; i < _faces.getRows(); i++)
-        rmean += _faces.getRow(i);
+    for (unsigned int i = 0; i < _faces.getCols(); i++)
+        rmean += _faces.getCol(i);
 
-    rmean /= _faces.getRows();
-    _meanFace = rmean.reshape(_iheight, _iwidth);
+    rmean /= _faces.getCols();
+    _meanFace = rmean.t().reshape(_iheight, _iwidth);
 }
 
 void Eigenfaces::getA(vpImage<unsigned char> & A) const {
