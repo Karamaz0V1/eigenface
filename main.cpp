@@ -19,18 +19,46 @@ void loadImage(vpImage<unsigned char> & I, int visage, int image);
 void demo_visp_broken();
 void demo_visp_broken2();
 
+void q0();
+void q3();
+
+Eigenfaces ef("../img", 40, 10);
+
 int main( int argc, char* argv[] )
 {
-    Eigenfaces ef("../img", 40, 10);
+    q0();
+    q3();
 
+    return 0;
+}
+
+void q0() {
+    vpImage<uchar> A;
+    ef.getA(A);
+    vpImageIo::writePNG(A, "all_images.png");
+}
+
+void q3() {
     vpImage<uchar> imean;
     ef.getMeanFace(imean);
 
-    vpImage<uchar> iface;
+    vpImage<uchar> iface, iface1, iface2;
     ef.getFace(iface);
+    ef.getFace(iface1, 10);
+    ef.getFace(iface2, 20);
 
-    vpImage<uchar> icenter;
+    vpImage<uchar> icenter, icenter1, icenter2;
     ef.getCenterFace(icenter);
+    ef.getCenterFace(icenter1, 10);
+    ef.getCenterFace(icenter2, 20);
+
+    vpImageIo::writePNG(iface,  "face_s1.png");
+    vpImageIo::writePNG(iface1, "face_s10.png");
+    vpImageIo::writePNG(iface2, "face_s20.png");
+
+    vpImageIo::writePNG(icenter,  "center_s1.png");
+    vpImageIo::writePNG(icenter1, "center_s10.png");
+    vpImageIo::writePNG(icenter2, "center_s20.png");
 
     vpDisplayX disp0(imean, 1000, 100, "mean face");
     vpDisplayX disp1(iface, 1100, 100, "face");
@@ -42,8 +70,6 @@ int main( int argc, char* argv[] )
     vpDisplay::flush(iface);
     vpDisplay::flush(icenter);
     vpDisplay::getClick(imean);
-
-    return 0;
 }
 
 void demo_visp_broken() {

@@ -53,7 +53,7 @@ void Eigenfaces::getFace(vpImage<unsigned char> & face, int subject, int image) 
 }
 
 void Eigenfaces::getFace(vpMatrix & face, int subject, int image) const {
-    face = _faces.getRow((subject - 1) * _nSubjects + image - 1).reshape(_iheight, _iwidth);
+    face = _faces.getRow((subject - 1) * _nImages + image - 1).reshape(_iheight, _iwidth);
 }
 
 void Eigenfaces::getCenterFace(vpImage<unsigned char> & centerFace, int subject, int image) const {
@@ -83,4 +83,8 @@ void Eigenfaces::initMeanFace() {
 
     rmean /= _faces.getRows();
     _meanFace = rmean.reshape(_iheight, _iwidth);
+}
+
+void Eigenfaces::getA(vpImage<unsigned char> & A) const {
+    vpMatrixToVpImage(_faces, A);
 }

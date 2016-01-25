@@ -17,6 +17,7 @@ class Eigenfaces {
         void getMeanFace(vpImage<unsigned char> & meanFace) const;
         void getFace(vpImage<unsigned char> & face, int subject = 1, int image = 1) const;
         void getCenterFace(vpImage<unsigned char> & centerFace, int subject = 1, int image = 1) const;
+        void getA(vpImage<unsigned char> & A) const;
 
     protected:
         void getFace(vpMatrix & face, int subject, int image) const;
