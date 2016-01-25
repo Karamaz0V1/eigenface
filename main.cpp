@@ -21,6 +21,7 @@ void demo_visp_broken2();
 
 void q0();
 void q3();
+void q6();
 
 Eigenfaces ef("../img", 40, 10);
 
@@ -28,6 +29,7 @@ int main( int argc, char* argv[] )
 {
     q0();
     q3();
+    q6();
 
     return 0;
 }
@@ -69,6 +71,27 @@ void q3() {
     vpDisplay::flush(imean);
     vpDisplay::flush(iface);
     vpDisplay::flush(icenter);
+    vpDisplay::getClick(imean);
+}
+
+void q6() {
+    vpImage<uchar> imean;
+    ef.getMeanFace(imean);
+
+    vpImage<uchar> ieface, ieface1, ieface2;
+    ef.getEigenface(ieface);
+    ef.getEigenface(ieface1, 10);
+    ef.getEigenface(ieface2, 20);
+
+    vpDisplayX disp0(imean, 1000, 100, "mean face");
+    vpDisplayX disp1(ieface, 1100, 100, "eigenface 1");
+    vpDisplayX disp2(ieface1, 1200, 100, "eigenface 10");
+    vpDisplay::display(imean);
+    vpDisplay::display(ieface);
+    vpDisplay::display(ieface1);
+    vpDisplay::flush(imean);
+    vpDisplay::flush(ieface);
+    vpDisplay::flush(ieface1);
     vpDisplay::getClick(imean);
 }
 

@@ -16,12 +16,14 @@ class Eigenfaces {
         Eigenfaces(const std::string & dbUrl, int numberOfSubjects = 10, int numberOfImages = 5);
         void getMeanFace(vpImage<unsigned char> & meanFace) const;
         void getFace(vpImage<unsigned char> & face, int subject = 1, int image = 1) const;
+        void getEigenface(vpImage<unsigned char> & eigenface, int subject = 1, int image = 1) const;
         void getCenterFace(vpImage<unsigned char> & centerFace, int subject = 1, int image = 1) const;
         void getA(vpImage<unsigned char> & A) const;
         void computeEigenfaces();
 
     protected:
         void getFace(vpMatrix & face, int subject, int image) const;
+        void getEigenface(vpMatrix & eigenface, int subject, int image) const;
         void getCenterFace(vpMatrix & centerFace, int subject, int image) const;
 
     private:
