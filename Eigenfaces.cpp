@@ -39,7 +39,14 @@ Eigenfaces::Eigenfaces(const std::string & dbUrl, int numberOfSubjects, int numb
     cout << numberOfImages * numberOfSubjects << " images in db" << endl;
 
     // Calculate mean face
+    cout << "Calculate mean face..." << endl;
     initMeanFace();
+
+    // Calculate the eigenfaces
+    cout << "Calculate the eigenfaces..." << endl;
+    computeEigenfaces();
+
+    cout << "Initialization done" << endl;
 }
 
 void Eigenfaces::getMeanFace(vpImage<unsigned char> & meanFace) const {
@@ -78,7 +85,7 @@ void Eigenfaces::loadImage(vpImage<unsigned char> & I, int visage, int image) co
 void Eigenfaces::initMeanFace() {
     vpRowVector rmean(_iwidth * _iheight);
 
-    for (int i = 0; i < _faces.getRows(); i++)
+    for (unsigned int i = 0; i < _faces.getRows(); i++)
         rmean += _faces.getRow(i);
 
     rmean /= _faces.getRows();
@@ -87,4 +94,11 @@ void Eigenfaces::initMeanFace() {
 
 void Eigenfaces::getA(vpImage<unsigned char> & A) const {
     vpMatrixToVpImage(_faces, A);
+}
+
+void Eigenfaces::computeEigenfaces() {
+    _eigenfaces = _faces;
+    vpColVector S;
+    vpMatrix V;
+    _eigenfaces.svd(S, V);
 }

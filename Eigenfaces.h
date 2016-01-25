@@ -18,6 +18,7 @@ class Eigenfaces {
         void getFace(vpImage<unsigned char> & face, int subject = 1, int image = 1) const;
         void getCenterFace(vpImage<unsigned char> & centerFace, int subject = 1, int image = 1) const;
         void getA(vpImage<unsigned char> & A) const;
+        void computeEigenfaces();
 
     protected:
         void getFace(vpMatrix & face, int subject, int image) const;
@@ -26,6 +27,7 @@ class Eigenfaces {
     private:
         vpMatrix _faces;
         vpMatrix _meanFace;
+        vpMatrix _eigenfaces;
         std::string _dbUrl;
         int _iwidth, _iheight; // db images size
         int _nSubjects, _nImages;

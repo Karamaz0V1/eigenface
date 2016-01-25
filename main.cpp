@@ -136,7 +136,7 @@ void load() {
 
     // Compute mean face
     vpColVector mean(iheight * iwidth);
-    for (int face = 0; face < I.getCols(); face++) 
+    for (unsigned int face = 0; face < I.getCols(); face++) 
         for (int i = 0; i < iheight * iwidth; i++)
             mean[i] += I[i][face];
 
