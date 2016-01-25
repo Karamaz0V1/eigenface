@@ -19,7 +19,7 @@ class Eigenfaces {
         void getEigenface(vpImage<unsigned char> & eigenface, int subject = 1, int image = 1) const;
         void getCenterFace(vpImage<unsigned char> & centerFace, int subject = 1, int image = 1) const;
         void getA(vpImage<unsigned char> & A) const;
-        void computeEigenfaces();
+        void getU(vpImage<unsigned char> & U) const;
 
     protected:
         void getFace(vpMatrix & face, int subject, int image) const;
@@ -37,6 +37,7 @@ class Eigenfaces {
     private:
         void loadImage(vpImage<unsigned char> & I, int visage, int image) const;
         void initMeanFace();
+        void computeEigenfaces();
 };
 
 #endif /* __EIGENFACES_H__ */

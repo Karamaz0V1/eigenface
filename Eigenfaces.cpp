@@ -106,9 +106,14 @@ void Eigenfaces::getA(vpImage<unsigned char> & A) const {
     vpMatrixToVpImage(_faces, A);
 }
 
+void Eigenfaces::getU(vpImage<unsigned char> & U) const {
+    vpMatrixToVpImage(_eigenfaces, U);
+}
+
 void Eigenfaces::computeEigenfaces() {
     _eigenfaces = _faces;
     vpColVector S;
     vpMatrix V;
     _eigenfaces.svd(S, V);
+    vpMatrixNormalize(_eigenfaces);
 }

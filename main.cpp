@@ -93,6 +93,10 @@ void q6() {
     vpDisplay::flush(ieface);
     vpDisplay::flush(ieface1);
     vpDisplay::getClick(imean);
+
+    vpImage<uchar> U;
+    ef.getU(U);
+    vpImageIo::writePNG(U, "eigenfaces.png");
 }
 
 void demo_visp_broken() {
