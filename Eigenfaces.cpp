@@ -25,19 +25,8 @@ Eigenfaces::Eigenfaces(const std::string & dbUrl, int numberOfSubjects, int numb
     _iwidth = im.getWidth();
 
     // Load matrix
-    for (int f = 1; f <= numberOfSubjects; f++)
-        for (int pf = 1; pf <= numberOfImages; pf++) {
-            cout << "Loading face " << f << " expression " << pf << endl;
-            vpImage<unsigned char> imface;
-            loadImage(imface, f, pf);
-
-            vpMatrix mimface;
-            vpImageToVpMatrix(imface, mimface);
-
-            _faces.stack(mimface.stackRows());
-        }
-    _faces = _faces.t();
-    cout << numberOfImages * numberOfSubjects << " images in db" << endl;
+    cout << "Load faces database..." << endl;
+    loadDb(numberOfSubjects, numberOfImages);
 
     // Calculate mean face
     cout << "Calculate mean face..." << endl;
@@ -117,4 +106,21 @@ void Eigenfaces::computeEigenfaces() {
     vpMatrix V;
     _eigenfaces.svd(S, V);
     vpMatrixNormalize(_eigenfaces);
+}
+
+
+void Eigenfaces::loadDb(int nbSubjects, int nbImages) {
+    for (int f = 1; f <= nbSubjects; f++)
+        for (int pf = 1; pf <= nbImages; pf++) {
+            cout << "Loading face " << f << " expression " << pf << endl;
+            vpImage<unsigned char> imface;
+            loadImage(imface, f, pf);
+
+            vpMatrix mimface;
+            vpImageToVpMatrix(imface, mimface);
+
+            _faces.stack(mimface.stackRows());
+        }
+    _faces = _faces.t();
+    cout << nbImages * nbSubjects << " images in db" << endl;
 }
