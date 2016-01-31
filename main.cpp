@@ -23,13 +23,20 @@ void q0();
 void q3();
 void q6();
 
-Eigenfaces ef("../img", 40, 10);
+Eigenfaces ef("../img", 40, 5);
 
 int main( int argc, char* argv[] )
 {
-    q0();
-    q3();
-    q6();
+    //q0();
+    //q3();
+    //q6();
+    vpColVector coord;
+    ef.getFaceCoordinates(coord, 1, 10);
+
+    cout << "Coordinates: ";
+    for (int i = 0; i < coord.size(); i++)
+        cout << coord[i] << " ";
+    cout << endl;
 
     return 0;
 }

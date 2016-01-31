@@ -20,7 +20,7 @@ class Eigenfaces {
         void getCenterFace(vpImage<unsigned char> & centerFace, int subject = 1, int image = 1) const;
         double getEigenvalue(int subject = 1, int image = 1) const;
 
-        void getFaceCoordinates(std::vector<double> coordinates, int subject = 1, int image = 1) const;
+        void getFaceCoordinates(vpColVector & coordinates, int subject = 1, int image = 1) const;
 
         void getI(vpImage<unsigned char> & I) const;
         void getA(vpImage<unsigned char> & A) const;
