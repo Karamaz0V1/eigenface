@@ -81,9 +81,7 @@ void Eigenfaces::getCenterFace(vpImage<unsigned char> & centerFace, int subject,
 }
 
 void Eigenfaces::getCenterFace(vpMatrix & centerFace, int subject, int image) const {
-    vpMatrix face;
-    getFace(face, subject, image);
-    centerFace = face - _meanFace;
+    centerFace = _centerfaces.getCol((subject - 1) * _nImages + image - 1).t().reshape(_iheight, _iwidth);
 }
 
 void Eigenfaces::loadImage(vpImage<unsigned char> & I, int visage, int image) const {
@@ -102,8 +100,14 @@ void Eigenfaces::initMeanFace() {
     _meanFace = rmean.t().reshape(_iheight, _iwidth);
 }
 
+void Eigenfaces::getI(vpImage<unsigned char> & I) const {
+    vpMatrixToVpImage(_faces, I);
+}
+
 void Eigenfaces::getA(vpImage<unsigned char> & A) const {
-    vpMatrixToVpImage(_faces, A);
+    vpMatrix centerfaces = _centerfaces;
+    vpMatrixNormalize(centerfaces);
+    vpMatrixToVpImage(centerfaces, A);
 }
 
 void Eigenfaces::getU(vpImage<unsigned char> & U) const {
@@ -111,7 +115,7 @@ void Eigenfaces::getU(vpImage<unsigned char> & U) const {
 }
 
 void Eigenfaces::computeEigenfaces() {
-    _eigenfaces = _faces;
+    _eigenfaces = _centerfaces;
     vpMatrix V;
     _eigenfaces.svd(_eigenvalues, V);
     _eigenvalues.normalize();
@@ -119,10 +123,10 @@ void Eigenfaces::computeEigenfaces() {
 }
 
 void Eigenfaces::computeCenterfaces() {
-    vpColVector mean = _meanFace.stackColumns();
+    vpRowVector mean = _meanFace.stackRows();
 
     for (unsigned int i = 0; i < _faces.getCols(); i++)
-        _centerfaces.stack((_faces.getCol(i) - mean).t());
+        _centerfaces.stack(_faces.getCol(i).t() - mean);
 
     _centerfaces = _centerfaces.t();
 }

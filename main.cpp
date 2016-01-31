@@ -23,12 +23,12 @@ void q0();
 void q3();
 void q6();
 
-Eigenfaces ef("../img", 40, 10);
+Eigenfaces ef("../img", 40, 5);
 
 int main( int argc, char* argv[] )
 {
     q0();
-    //q3();
+    q3();
     q6();
 
     return 0;
@@ -38,7 +38,7 @@ void q0() {
     vpImage<uchar> A;
     ef.getA(A);
     cout << "rows: " << A.getRows() << " cols: " << A.getCols() << endl;
-    vpImageIo::writePNG(A, "all_images.png");
+    vpImageIo::writePNG(A, "all_centerimages.png");
 }
 
 void q3() {
