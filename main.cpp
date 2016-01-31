@@ -22,6 +22,7 @@ void demo_visp_broken2();
 void q0();
 void q3();
 void q6();
+void q7();
 
 Eigenfaces ef("../img", 40, 5);
 
@@ -30,13 +31,7 @@ int main( int argc, char* argv[] )
     //q0();
     //q3();
     //q6();
-    vpColVector coord;
-    ef.getFaceCoordinates(coord, 1, 10);
-
-    cout << "Coordinates: ";
-    for (int i = 0; i < coord.size(); i++)
-        cout << coord[i] << " ";
-    cout << endl;
+    q7();
 
     return 0;
 }
@@ -133,6 +128,18 @@ void q6() {
     vpImage<uchar> U;
     ef.getU(U);
     vpImageIo::writePNG(U, "eigenfaces.png");
+}
+
+void q7() {
+    vpImage<uchar> rface;
+    vpColVector coord;
+    ef.getFaceCoordinates(coord, 1, 10);
+    ef.getFaceWithCoordinates(coord, rface);
+
+    vpDisplayX disp(rface, 1000, 100);
+    vpDisplay::display(rface);
+    vpDisplay::flush(rface);
+    vpDisplay::getClick(rface);
 }
 
 void demo_visp_broken() {

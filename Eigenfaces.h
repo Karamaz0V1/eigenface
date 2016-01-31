@@ -21,6 +21,7 @@ class Eigenfaces {
         double getEigenvalue(int subject = 1, int image = 1) const;
 
         void getFaceCoordinates(vpColVector & coordinates, int subject = 1, int image = 1) const;
+        void getFaceWithCoordinates(const vpColVector & coordinates, vpImage<unsigned char> & face) /*const*/;
 
         void getI(vpImage<unsigned char> & I) const;
         void getA(vpImage<unsigned char> & A) const;
@@ -30,6 +31,7 @@ class Eigenfaces {
         void getFace(vpMatrix & face, int subject, int image) const;
         void getEigenface(vpMatrix & eigenface, int subject, int image) const;
         void getCenterFace(vpMatrix & centerFace, int subject, int image) const;
+        void getFaceWithCoordinates(const vpColVector & coordinates, vpMatrix & face) /*const*/;
 
     private:
         vpMatrix _faces;

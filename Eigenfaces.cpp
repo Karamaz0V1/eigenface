@@ -93,6 +93,21 @@ void Eigenfaces::getFaceCoordinates(vpColVector & coordinates, int subject, int 
         coordinates.stack(rface * _centerfaces.getCol(i));
 }
 
+void Eigenfaces::getFaceWithCoordinates(const vpColVector & coordinates, vpImage<unsigned char> & face) /*const*/ {
+    vpMatrix mface;
+    getFaceWithCoordinates(coordinates, mface);
+    vpMatrixToVpImage(mface, face);
+}
+
+void Eigenfaces::getFaceWithCoordinates(const vpColVector & coordinates, vpMatrix & face) /*const*/ {
+    vpColVector cface = _meanFace.stackRows().t();
+
+    for (unsigned int i = 0; i < coordinates.size(); i++)
+        cface += _eigenfaces.getCol(i) * coordinates[i];
+
+    face = cface.reshape(_iheight, _iwidth);
+}
+
 void Eigenfaces::getCenterFace(vpMatrix & centerFace, int subject, int image) const {
     centerFace = _centerfaces.getCol((subject - 1) * _nImages + image - 1).t().reshape(_iheight, _iwidth);
 }
