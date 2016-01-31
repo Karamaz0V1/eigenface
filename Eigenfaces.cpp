@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <visp/vpImageIo.h>
+#include <visp/vpDisplayX.h>
 #include <Eigenfaces.h>
 #include <kvisp.h>
 
@@ -88,6 +89,15 @@ void Eigenfaces::getFaceCoordinates(vpColVector & coordinates, int subject, int 
     vpImageToVpMatrix(face, mface);
 
     vpRowVector rface = (mface - _meanFace).stackRows();
+    vpMatrix rmface = rface.reshape(_iheight, _iwidth);
+    vpImage<uchar> irmface;
+    vpMatrixNormalize(rmface);
+    vpMatrixToVpImage(rmface, irmface);
+
+    vpDisplayX tmp(irmface, 1000, 100, "TMP");
+    vpDisplay::display(irmface);
+    vpDisplay::flush(irmface);
+    vpDisplay::getClick(irmface);
 
     for (unsigned int i = 0; i < _nSubjects * _nImages; i++)
         coordinates.stack(rface * _centerfaces.getCol(i));
@@ -96,6 +106,7 @@ void Eigenfaces::getFaceCoordinates(vpColVector & coordinates, int subject, int 
 void Eigenfaces::getFaceWithCoordinates(const vpColVector & coordinates, vpImage<unsigned char> & face) /*const*/ {
     vpMatrix mface;
     getFaceWithCoordinates(coordinates, mface);
+    vpMatrixNormalize(mface);
     vpMatrixToVpImage(mface, face);
 }
 
