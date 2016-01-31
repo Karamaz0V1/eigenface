@@ -33,8 +33,8 @@ Eigenfaces::Eigenfaces(const std::string & dbUrl, int numberOfSubjects, int numb
     initMeanFace();
 
     // Compute the center faces
-    //cout << "Compute the center faces..." << endl;
-    //computeCenterfaces();
+    cout << "Compute the center faces..." << endl;
+    computeCenterfaces();
 
     // Compute the eigenfaces
     cout << "Compute the eigenfaces..." << endl;
@@ -83,7 +83,7 @@ void Eigenfaces::getCenterFace(vpImage<unsigned char> & centerFace, int subject,
 void Eigenfaces::getCenterFace(vpMatrix & centerFace, int subject, int image) const {
     vpMatrix face;
     getFace(face, subject, image);
-    centerFace = face -_meanFace;
+    centerFace = face - _meanFace;
 }
 
 void Eigenfaces::loadImage(vpImage<unsigned char> & I, int visage, int image) const {
@@ -115,10 +115,17 @@ void Eigenfaces::computeEigenfaces() {
     vpMatrix V;
     _eigenfaces.svd(_eigenvalues, V);
     _eigenvalues.normalize();
-    cout << _eigenvalues << endl;
     vpMatrixNormalize(_eigenfaces);
 }
 
+void Eigenfaces::computeCenterfaces() {
+    vpColVector mean = _meanFace.stackColumns();
+
+    for (unsigned int i = 0; i < _faces.getCols(); i++)
+        _centerfaces.stack((_faces.getCol(i) - mean).t());
+
+    _centerfaces = _centerfaces.t();
+}
 
 void Eigenfaces::loadDb(int nbSubjects, int nbImages) {
     for (int f = 1; f <= nbSubjects; f++)

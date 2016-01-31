@@ -41,6 +41,7 @@ class Eigenfaces {
         void loadImage(vpImage<unsigned char> & I, int visage, int image) const;
         void loadDb(int nbSubjects, int nbImages);
         void initMeanFace();
+        void computeCenterfaces();
         void computeEigenfaces();
 };
 
