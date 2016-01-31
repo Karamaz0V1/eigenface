@@ -47,8 +47,8 @@ void q3() {
 
     vpImage<uchar> iface, iface1, iface2;
     ef.getFace(iface);
-    ef.getFace(iface1, 10);
-    ef.getFace(iface2, 20);
+    ef.getFace(iface1, 1, 10);
+    ef.getFace(iface2, 1, 20);
 
     vpImage<uchar> icenter, icenter1, icenter2;
     ef.getCenterFace(icenter);
@@ -86,6 +86,12 @@ void q6() {
     ef.getEigenface(ieface3, 1, 4);
     ef.getEigenface(ieface4, 1, 5);
     ef.getEigenface(ieface5, 1, 6);
+
+    cout << ef.getEigenvalue() << endl;
+    cout << ef.getEigenvalue(1, 3) << endl;
+    cout << ef.getEigenvalue(1, 4) << endl;
+    cout << ef.getEigenvalue(1, 5) << endl;
+    cout << ef.getEigenvalue(1, 6) << endl;
 
     vpDisplayX disp0(imean, 1000, 100, "mean face");
     vpDisplayX disp1(ieface0, 1100, 100, "eigenface 1");
