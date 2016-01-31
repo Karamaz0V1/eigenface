@@ -80,6 +80,19 @@ void Eigenfaces::getCenterFace(vpImage<unsigned char> & centerFace, int subject,
     vpMatrixToVpImage(mcenterFace, centerFace);
 }
 
+void Eigenfaces::getFaceCoordinates(vector<double> coordinates, int subject, int image) const {
+    coordinates.clear();
+    vpImage<uchar> face;
+    loadImage(face, subject, image);
+    vpMatrix mface;
+    vpImageToVpMatrix(face, mface);
+
+    vpRowVector rface = (mface - _meanFace).stackRows();
+
+    for (unsigned int i = 0; i < _nSubjects * _nImages; i++)
+        coordinates.push_back(rface * _centerfaces.getCol(i));
+}
+
 void Eigenfaces::getCenterFace(vpMatrix & centerFace, int subject, int image) const {
     centerFace = _centerfaces.getCol((subject - 1) * _nImages + image - 1).t().reshape(_iheight, _iwidth);
 }

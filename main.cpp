@@ -23,7 +23,7 @@ void q0();
 void q3();
 void q6();
 
-Eigenfaces ef("../img", 40, 5);
+Eigenfaces ef("../img", 40, 10);
 
 int main( int argc, char* argv[] )
 {
