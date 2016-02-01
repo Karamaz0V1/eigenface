@@ -18,11 +18,9 @@ Eigenfaces::Eigenfaces(const std::string & dbUrl, int numberOfSubjects, int numb
     _nSubjects(numberOfSubjects),
     _nImages(numberOfImages)
 {
-    // Get image specs
-    vpImage<unsigned char> im;
-    loadImage(im, 1, 1);
-    _iheight = im.getHeight();
-    _iwidth = im.getWidth();
+    // Init image specs
+    //cout << 
+    initImageSpec();
 
     // Load matrix
     cout << "Load faces database..." << endl;
@@ -123,4 +121,11 @@ void Eigenfaces::loadDb(int nbSubjects, int nbImages) {
         }
     _faces = _faces.t();
     cout << nbImages * nbSubjects << " images in db" << endl;
+}
+
+void Eigenfaces::initImageSpec() {
+    vpImage<unsigned char> im;
+    loadImage(im, 1, 1);
+    _iheight = im.getHeight();
+    _iwidth = im.getWidth();
 }
