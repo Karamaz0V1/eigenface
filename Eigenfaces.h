@@ -26,6 +26,7 @@ class Eigenfaces {
         void getI(vpImage<unsigned char> & I) const;
         void getA(vpImage<unsigned char> & A) const;
         void getU(vpImage<unsigned char> & U) const;
+        void getS(vpColVector & S) const;
 
     protected:
         void getFace(vpMatrix & face, int subject, int image) const;

@@ -136,6 +136,9 @@ void q7() {
     ef.getFaceCoordinates(coord, 1, 10);
     ef.getFaceWithCoordinates(coord, rface);
 
+    cout << "Face coordinates: " << endl;
+    cout << coord << endl;
+
     vpDisplayX disp(rface, 1000, 100);
     vpDisplay::display(rface);
     vpDisplay::flush(rface);
