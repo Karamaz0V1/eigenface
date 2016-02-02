@@ -20,7 +20,7 @@ class Eigenfaces {
         void getCenterFace(vpImage<unsigned char> & centerFace, int subject = 1, int image = 1) const;
         double getEigenvalue(int subject = 1, int image = 1) const;
 
-        void getFaceCoordinates(vpColVector & coordinates, int subject = 1, int image = 1) const;
+        void getFaceCoordinates(vpColVector & coordinates, int subject = 1, int image = 1, int k = 0) const;
         void getFaceWithCoordinates(const vpColVector & coordinates, vpImage<unsigned char> & face) /*const*/;
 
         void getI(vpImage<unsigned char> & I) const;
@@ -46,6 +46,7 @@ class Eigenfaces {
 
     private:
         void loadImage(vpImage<unsigned char> & I, int visage, int image) const;
+        void loadImage(vpMatrix & I, int visage, int image) const;
         void initImageSpec();
         void loadDb(int nbSubjects, int nbImages);
         void initMeanFace();

@@ -79,39 +79,16 @@ void Eigenfaces::getCenterFace(vpImage<unsigned char> & centerFace, int subject,
     vpMatrixToVpImage(mcenterFace, centerFace);
 }
 
-void Eigenfaces::getFaceCoordinates(vpColVector & coordinates, int subject, int image) const {
-    vpImage<uchar> face;
+void Eigenfaces::getFaceCoordinates(vpColVector & coordinates, int subject, int image, int k) const {
+    vpMatrix face;
     loadImage(face, subject, image);
-    vpMatrix mface;
-    vpImageToVpMatrix(face, mface);
 
-    vpColVector rface = (mface - _meanFace).stackRows().t();
+    if (k == 0) k = _nSubjects * _nImages;
 
-    vpMatrix mrface = rface.t().reshape(_iheight, _iwidth);
-    vpMatrixNormalize(mrface);
-    vpImage<uchar> irface;
-    vpMatrixToVpImage(mrface, irface);
-    vpDisplayX tmp(irface, 1000, 100, "tmp");
-    vpDisplay::display(irface);
-    vpDisplay::flush(irface);
-    vpDisplay::getClick(irface);
+    vpColVector rface = (face - _meanFace).stackRows().t();
 
-    for (int i = 0; i < _nSubjects * _nImages; i++) {
-        double res = _eigenfaces.getCol(i).t() * rface;
-        cout << "res: " << res << endl;
-        //if(i == 1) coordinates.stack(1);
-        //else coordinates.stack(0);
-        coordinates.stack(res);
-        vpMatrix meigen = _eigenfaces.getCol(i).t().reshape(_iheight, _iwidth);
-        vpMatrixNormalize(meigen);
-        vpImage<uchar> ieigen;
-        vpMatrixToVpImage(meigen, ieigen);
-        vpDisplayX tmp2(ieigen, 1000, 100, "tmp2");
-        vpDisplay::display(ieigen);
-        vpDisplay::flush(ieigen);
-        //vpDisplay::getClick(ieigen);
-    }
-        //coordinates.stack(rface * _eigenfaces.getCol(i));
+    for (int i = 0; i < k; i++)
+        coordinates.stack(_eigenfaces.getCol(i).t() * rface);
 }
 
 void Eigenfaces::getFaceWithCoordinates(const vpColVector & coordinates, vpImage<unsigned char> & face) /*const*/ {
@@ -132,6 +109,12 @@ void Eigenfaces::getFaceWithCoordinates(const vpColVector & coordinates, vpMatri
 
 void Eigenfaces::getCenterFace(vpMatrix & centerFace, int subject, int image) const {
     centerFace = _centerfaces.getCol((subject - 1) * _nImages + image - 1).t().reshape(_iheight, _iwidth);
+}
+
+void Eigenfaces::loadImage(vpMatrix & I, int visage, int image) const {
+    vpImage<uchar> iI;
+    loadImage(iI, visage, image);
+    vpImageToVpMatrix(iI, I);
 }
 
 void Eigenfaces::loadImage(vpImage<unsigned char> & I, int visage, int image) const {
@@ -169,7 +152,6 @@ void Eigenfaces::computeEigenfaces() {
     vpMatrix V;
     _eigenfaces.svd(_eigenvalues, V);
     _eigenvalues.normalize();
-    //vpMatrixNormalize(_eigenfaces);
 }
 
 void Eigenfaces::computeCenterfaces() {
