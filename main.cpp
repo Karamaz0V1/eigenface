@@ -5,7 +5,7 @@
  * Author: Florent Guiotte <guiotte.florent@gmail.com>
  *
  **************************************************************************/
-
+//tarot
 #include <iostream>
 #include <visp/vpImageIo.h>
 #include <visp/vpDisplayX.h>
