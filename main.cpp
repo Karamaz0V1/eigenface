@@ -133,7 +133,7 @@ void q6() {
 void q8() {
     vpImage<uchar> rface;
     vpColVector coord;
-    ef.getFaceCoordinates(coord, 40, 2);
+    ef.getFaceCoordinates(coord, 40, 2, 500);
     ef.getFaceWithCoordinates(coord, rface);
 
     // Display face coordinates

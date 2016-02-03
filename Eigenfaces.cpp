@@ -84,6 +84,7 @@ void Eigenfaces::getFaceCoordinates(vpColVector & coordinates, int subject, int 
     loadImage(face, subject, image);
 
     if (k == 0) k = _nSubjects * _nImages;
+    if (k > _nSubjects * _nImages) k = _nSubjects * _nImages;
 
     vpColVector rface = (face - _meanFace).stackRows().t();
 
