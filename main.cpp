@@ -6,7 +6,7 @@
  *
  **************************************************************************/
 
-#include <iostream>
+//#include <iostream>
 #include <visp/vpImageIo.h>
 #include <visp/vpDisplayX.h>
 #include <Eigenfaces.h>
@@ -23,8 +23,9 @@ void q0();
 void q3();
 void q6();
 void q8();
+void q8r();
 
-Eigenfaces ef("../img", 36, 10);
+Eigenfaces ef("../img", 36, 9);
 
 int main( int argc, char* argv[] )
 {
@@ -32,6 +33,7 @@ int main( int argc, char* argv[] )
     q3();
     q6();
     q8();
+    q8r();
 
     return 0;
 }
@@ -185,6 +187,25 @@ void q8() {
     vpImageIo::writePNG(rface3, "q8_20_1_k50.png");
 
     vpDisplay::getClick(rface);
+}
+
+void q8r() {
+    vector<int> Ks = {1, 5, 10, 30, 50, 100, 200, 300, 324};
+    vector<pair<int, int> > subjects = {{1, 1}, {10, 1}, {1, 10}, {10, 10}, {37, 1}, {40, 2}};
+
+
+    for (vector<pair<int, int> >::const_iterator subject = subjects.begin(); subject != subjects.end(); subject++)
+        for (vector<int>::const_iterator k = Ks.begin(); k != Ks.end(); k++) {
+            cout << "Compute subject " << subject->first << " " << subject->second << " with k=" << *k << endl;
+            vpImage<uchar> rface;
+            vpColVector coord;
+            ef.getFaceCoordinates(coord, subject->first, subject->second, *k);
+            ef.getFaceWithCoordinates(coord, rface);
+
+            stringstream filename;
+            filename << "q8r_" << subject->first << "_" << subject->second << "_k" << *k  << ".png";
+            vpImageIo::writePNG(rface, filename.str());
+        }
 }
 
 void demo_visp_broken() {
