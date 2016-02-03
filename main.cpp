@@ -24,11 +24,11 @@ void q3();
 void q6();
 void q8();
 
-Eigenfaces ef("../img", 39, 10);
+Eigenfaces ef("../img", 36, 10);
 
 int main( int argc, char* argv[] )
 {
-    q0();
+    //q0();
     q3();
     q6();
     q8();
@@ -57,14 +57,6 @@ void q3() {
     ef.getCenterFace(icenter1, 10);
     ef.getCenterFace(icenter2, 20);
 
-    vpImageIo::writePNG(iface,  "face_s1.png");
-    vpImageIo::writePNG(iface1, "face_s10.png");
-    vpImageIo::writePNG(iface2, "face_s20.png");
-
-    vpImageIo::writePNG(icenter,  "center_s1.png");
-    vpImageIo::writePNG(icenter1, "center_s10.png");
-    vpImageIo::writePNG(icenter2, "center_s20.png");
-
     vpDisplayX disp0(imean, 1000, 100, "mean face");
     vpDisplayX disp1(iface, 1100, 100, "face");
     vpDisplayX disp2(icenter, 1200, 100, "center face");
@@ -74,6 +66,15 @@ void q3() {
     vpDisplay::flush(imean);
     vpDisplay::flush(iface);
     vpDisplay::flush(icenter);
+
+    vpImageIo::writePNG(iface,  "q3_face_s1.png");
+    vpImageIo::writePNG(iface1, "q3_face_s10.png");
+    vpImageIo::writePNG(iface2, "q3_face_s20.png");
+
+    vpImageIo::writePNG(icenter,  "q3_center_s1.png");
+    vpImageIo::writePNG(icenter1, "q3_center_s10.png");
+    vpImageIo::writePNG(icenter2, "q3_center_s20.png");
+
     vpDisplay::getClick(imean);
 }
 
@@ -81,27 +82,33 @@ void q6() {
     vpImage<uchar> imean;
     ef.getMeanFace(imean);
 
-    vpImage<uchar> ieface0, ieface1, ieface2, ieface3, ieface4, ieface5;
+    vpImage<uchar> ieface0, ieface1, ieface2, ieface3, ieface4, ieface5, ieface6;
     ef.getEigenface(ieface0);
     ef.getEigenface(ieface1, 1, 2);
     ef.getEigenface(ieface2, 1, 3);
     ef.getEigenface(ieface3, 1, 4);
     ef.getEigenface(ieface4, 1, 5);
     ef.getEigenface(ieface5, 1, 6);
+    ef.getEigenface(ieface6, 1, 7);
 
+    cout << "--- First Eigenvalues ---" << endl;
     cout << ef.getEigenvalue() << endl;
+    cout << ef.getEigenvalue(1, 2) << endl;
     cout << ef.getEigenvalue(1, 3) << endl;
     cout << ef.getEigenvalue(1, 4) << endl;
     cout << ef.getEigenvalue(1, 5) << endl;
     cout << ef.getEigenvalue(1, 6) << endl;
+    cout << ef.getEigenvalue(1, 7) << endl;
+    cout << "-------------------------" << endl;
 
-    vpDisplayX disp0(imean, 1000, 100, "mean face");
-    vpDisplayX disp1(ieface0, 1100, 100, "eigenface 1");
-    vpDisplayX disp2(ieface1, 1200, 100, "eigenface 2");
-    vpDisplayX disp3(ieface2, 1300, 100, "eigenface 3");
-    vpDisplayX disp4(ieface3, 1400, 100, "eigenface 4");
-    vpDisplayX disp5(ieface4, 1500, 100, "eigenface 5");
-    vpDisplayX disp6(ieface5, 1600, 100, "eigenface 6");
+    vpDisplayX disp0(imean,   1000, 100, "mean face");
+    vpDisplayX disp1(ieface0, 1100, 100, "eigf 1");
+    vpDisplayX disp2(ieface1, 1200, 100, "eigf 2");
+    vpDisplayX disp3(ieface2, 1300, 100, "eigf 3");
+    vpDisplayX disp4(ieface3, 1400, 100, "eigf 4");
+    vpDisplayX disp5(ieface4, 1500, 100, "eigf 5");
+    vpDisplayX disp6(ieface5, 1600, 100, "eigf 6");
+    vpDisplayX disp7(ieface6, 1700, 100, "eigf 7");
     vpDisplay::display(imean);
     vpDisplay::display(ieface0);
     vpDisplay::display(ieface1);
@@ -109,6 +116,7 @@ void q6() {
     vpDisplay::display(ieface3);
     vpDisplay::display(ieface4);
     vpDisplay::display(ieface5);
+    vpDisplay::display(ieface6);
     vpDisplay::flush(imean);
     vpDisplay::flush(ieface0);
     vpDisplay::flush(ieface1);
@@ -116,33 +124,66 @@ void q6() {
     vpDisplay::flush(ieface3);
     vpDisplay::flush(ieface4);
     vpDisplay::flush(ieface5);
+    vpDisplay::flush(ieface6);
+
+    vpImageIo::writePNG(ieface0, "q6_eigenface_1.png");
+    vpImageIo::writePNG(ieface1, "q6_eigenface_2.png");
+    vpImageIo::writePNG(ieface2, "q6_eigenface_3.png");
+    vpImageIo::writePNG(ieface3, "q6_eigenface_4.png");
+    vpImageIo::writePNG(ieface4, "q6_eigenface_5.png");
+    vpImageIo::writePNG(ieface5, "q6_eigenface_6.png");
+    vpImageIo::writePNG(ieface6, "q6_eigenface_7.png");
+
     vpDisplay::getClick(imean);
-
-    vpImageIo::writePNG(ieface0, "eigenface_1.png");
-    vpImageIo::writePNG(ieface1, "eigenface_2.png");
-    vpImageIo::writePNG(ieface2, "eigenface_3.png");
-    vpImageIo::writePNG(ieface3, "eigenface_4.png");
-    vpImageIo::writePNG(ieface4, "eigenface_5.png");
-    vpImageIo::writePNG(ieface5, "eigenface_6.png");
-
-    vpImage<uchar> U;
-    ef.getU(U);
-    vpImageIo::writePNG(U, "eigenfaces.png");
 }
 
 void q8() {
+    cout << "Compute test image 40 2" << endl;
     vpImage<uchar> rface;
     vpColVector coord;
-    ef.getFaceCoordinates(coord, 40, 2, 500);
+    ef.getFaceCoordinates(coord, 40, 2);
     ef.getFaceWithCoordinates(coord, rface);
 
     // Display face coordinates
     //cout << "Face coordinates: " << endl;
     //cout << coord << endl;
 
-    vpDisplayX disp(rface, 1000, 100);
+    cout << "Compute test image 37 1" << endl;
+    vpImage<uchar> rface1;
+    vpColVector coord1;
+    ef.getFaceCoordinates(coord1, 37, 1);
+    ef.getFaceWithCoordinates(coord1, rface1);
+
+    cout << "Compute reference image 20 1" << endl;
+    vpImage<uchar> rface2;
+    vpColVector coord2;
+    ef.getFaceCoordinates(coord2, 20, 1);
+    ef.getFaceWithCoordinates(coord2, rface2);
+
+    cout << "Compute reference image 20 1 with k = 50" << endl;
+    vpImage<uchar> rface3;
+    vpColVector coord3;
+    ef.getFaceCoordinates(coord3, 20, 1, 50);
+    ef.getFaceWithCoordinates(coord3, rface3);
+
+    vpDisplayX disp0(rface,  1000, 100, "T 40 2");
+    vpDisplayX disp1(rface1, 1100, 100, "T 37 1");
+    vpDisplayX disp2(rface2, 1200, 100, "T 20 1");
+    vpDisplayX disp3(rface3, 1300, 100, "T 20 1 k 50");
     vpDisplay::display(rface);
+    vpDisplay::display(rface1);
+    vpDisplay::display(rface2);
+    vpDisplay::display(rface3);
     vpDisplay::flush(rface);
+    vpDisplay::flush(rface1);
+    vpDisplay::flush(rface2);
+    vpDisplay::flush(rface3);
+
+    vpImageIo::writePNG(rface,  "q8_40_2.png");
+    vpImageIo::writePNG(rface1, "q8_37_1.png");
+    vpImageIo::writePNG(rface2, "q8_20_1.png");
+    vpImageIo::writePNG(rface3, "q8_20_1_k50.png");
+
     vpDisplay::getClick(rface);
 }
 
