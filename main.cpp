@@ -9,6 +9,7 @@
 //#include <iostream>
 #include <visp/vpImageIo.h>
 #include <visp/vpDisplayX.h>
+#include <visp3/gui/vpPlot.h>
 #include <Eigenfaces.h>
 #include <kvisp.h>
 #define IMGDIR "../img/"
@@ -24,16 +25,19 @@ void q3();
 void q6();
 void q8();
 void q8r();
+void q10();
 
-Eigenfaces ef("../img", 36, 9);
+//Eigenfaces ef("../img", 36, 9);
+Eigenfaces ef("../img", 10, 10);
 
 int main( int argc, char* argv[] )
 {
     //q0();
-    q3();
-    q6();
-    q8();
-    q8r();
+    //q3();
+    //q6();
+    //q8();
+    //q8r();
+    q10();
 
     return 0;
 }
@@ -206,6 +210,26 @@ void q8r() {
             filename << "q8r_" << subject->first << "_" << subject->second << "_k" << *k  << ".png";
             vpImageIo::writePNG(rface, filename.str());
         }
+}
+
+void q10() {
+    vpColVector singularValues;
+    ef.getS(singularValues);
+    vpColVector eigenValues = singularValues;
+    kvpPow2(eigenValues);
+    eigenValues = eigenValues.normalize();
+    cout << eigenValues << endl;
+    vpPlot A(1, 700, 700, 1000, 200, "Curves");
+    A.initGraph(0, 2);
+    double sum = 0;
+    for (unsigned int i = 0; i < eigenValues.size(); i++) {
+        sum += eigenValues[i] / eigenValues.sum();
+        //A.plot(0,0,i,eigenValues[i]);
+        A.plot(0,0,i,sum);
+    }
+    cout << "Sum: " << sum << endl;
+    cout << "Euc: " << eigenValues.euclideanNorm() << endl;
+    A.getPixelValue(true);
 }
 
 void demo_visp_broken() {
