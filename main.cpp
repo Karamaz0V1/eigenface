@@ -28,8 +28,11 @@ void q8r();
 void q10();
 void q11();
 
-Eigenfaces ef("../img", 36, 9);
-//Eigenfaces ef("../img", 10, 10);
+const int SUBJECTS = 36;
+const int IMAGES = 9;
+//const int SUBJECTS = 10;
+//const int IMAGES = 10;
+Eigenfaces ef("../img", SUBJECTS, IMAGES);
 
 int main( int argc, char* argv[] )
 {
@@ -236,22 +239,36 @@ void q10() {
 }
 
 void q11() {
-    vpColVector singularValues;
-    ef.getS(singularValues);
-    vpColVector eigenValues = singularValues;
-    kvpPow2(eigenValues);
-    eigenValues = eigenValues.normalize();
-    vpPlot A(1, 700, 700, 1000, 200, "Eigen Curve");
-    A.initGraph(0, 2);
-    A.setTitle(0, "Eigen values accumulation");
-    double sum = 0;
-    for (unsigned int i = 0; i < eigenValues.size(); i++) {
-        sum += eigenValues[i] / eigenValues.sum();
-        //A.plot(0,0,i,eigenValues[i]);
-        A.plot(0, 0, i, sum);
-    }
-    cout << "Sum: " << sum << endl;
-    cout << "Euc: " << eigenValues.euclideanNorm() << endl;
+    int m = (SUBJECTS - 1) * (IMAGES - 1);
+    vpColVector eqm(m + 1);
+
+    vpPlot A(1, 700, 1000, 1000, 200, "Mean error");
+    A.initGraph(0, 1);
+    A.setTitle(0, "Mean error depending on K");
+
+    for (int s = 1; s <= SUBJECTS; s++)
+        for (int i = 1; i <= IMAGES; i++) {
+            for (int k = 0; k <= m; k++) {
+                vpColVector coordinates;
+                ef.getFaceCoordinates(coordinates, s, i, k);
+
+                vpImage<uchar> face;
+                ef.getFaceWithCoordinates(coordinates, face);
+
+                double eqma = ef.getEQM(face, s, i);
+                eqm[k] += eqma;
+
+                cout << "Compute subject " << s << " image " << i << " for k=" << k << " : eqm=" << eqma << endl;
+            }
+            vpColVector eqmdisp = eqm / ((i - 1) * (s - 1));
+            A.resetPointList(0);
+            for (unsigned int k = 0; k < eqm.size(); k++)
+                A.plot(0, 0, k, eqm[k]);
+        }
+
+    eqm /= m;
+    cout << eqm << endl;
+
     A.getPixelValue(true);
 }
 
