@@ -246,9 +246,10 @@ void q11() {
     A.initGraph(0, 1);
     A.setTitle(0, "Mean error depending on K");
 
+    int cpt = 0;
     for (int s = 1; s <= SUBJECTS; s++)
         for (int i = 1; i <= IMAGES; i++) {
-            for (int k = 0; k <= m; k++) {
+            for (int k = 1; k <= m; k++) {
                 vpColVector coordinates;
                 ef.getFaceCoordinates(coordinates, s, i, k);
 
@@ -260,10 +261,12 @@ void q11() {
 
                 cout << "Compute subject " << s << " image " << i << " for k=" << k << " : eqm=" << eqma << endl;
             }
-            vpColVector eqmdisp = eqm / ((i - 1) * (s - 1));
+
+            vpColVector eqmdisp = eqm / ++cpt;
+
             A.resetPointList(0);
-            for (unsigned int k = 0; k < eqm.size(); k++)
-                A.plot(0, 0, k, eqm[k]);
+            for (unsigned int k = 0; k < eqmdisp.size(); k++)
+                A.plot(0, 0, k, eqmdisp[k]);
         }
 
     eqm /= m;
