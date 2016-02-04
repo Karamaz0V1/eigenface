@@ -73,3 +73,15 @@ double keqm(const vpArray2D<double> & array1, const vpArray2D<double> & array2) 
 
     return sum / array1.size();
 }
+
+double keqm(const vpImage<unsigned char> & array1, const vpImage<unsigned char> & array2) {
+    assert(array1.getSize() == array2.getSize());
+
+    double sum = 0;
+
+    unsigned char * j = array2.bitmap;
+    for (unsigned char * i = array1.bitmap; i != array1.bitmap + array1.getSize(); i++, j++)
+        sum += (*i - *j) * (*i - *j);
+
+    return sum / array1.getSize();
+}

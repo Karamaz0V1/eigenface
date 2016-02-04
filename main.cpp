@@ -28,8 +28,8 @@ void q8r();
 void q10();
 void q11();
 
-//Eigenfaces ef("../img", 36, 9);
-Eigenfaces ef("../img", 10, 10);
+Eigenfaces ef("../img", 36, 9);
+//Eigenfaces ef("../img", 10, 10);
 
 int main( int argc, char* argv[] )
 {
@@ -37,7 +37,7 @@ int main( int argc, char* argv[] )
     //q3();
     //q6();
     //q8();
-    //q8r();
+    q8r();
     //q10();
     q11();
 
@@ -202,11 +202,12 @@ void q8r() {
 
     for (vector<pair<int, int> >::const_iterator subject = subjects.begin(); subject != subjects.end(); subject++)
         for (vector<int>::const_iterator k = Ks.begin(); k != Ks.end(); k++) {
-            cout << "Compute subject " << subject->first << " " << subject->second << " with k=" << *k << endl;
+            cout << "Compute subject " << subject->first << " " << subject->second << " with k=" << *k;
             vpImage<uchar> rface;
             vpColVector coord;
             ef.getFaceCoordinates(coord, subject->first, subject->second, *k);
             ef.getFaceWithCoordinates(coord, rface);
+            cout << " EQM=" << ef.getEQM(rface, subject->first, subject->second) << endl;
 
             stringstream filename;
             filename << "q8r_" << subject->first << "_" << subject->second << "_k" << *k  << ".png";
@@ -220,7 +221,6 @@ void q10() {
     vpColVector eigenValues = singularValues;
     kvpPow2(eigenValues);
     eigenValues = eigenValues.normalize();
-    cout << eigenValues << endl;
     vpPlot A(1, 700, 700, 1000, 200, "Eigen Curve");
     A.initGraph(0, 2);
     A.setTitle(0, "Eigen values accumulation");
@@ -236,17 +236,11 @@ void q10() {
 }
 
 void q11() {
-    vpMatrix a(10, 10);
-    vpMatrix b(10, 10);
-    a[0][0] = 1;
-    cout << keqm(a, b) << endl;
-    return;
     vpColVector singularValues;
     ef.getS(singularValues);
     vpColVector eigenValues = singularValues;
     kvpPow2(eigenValues);
     eigenValues = eigenValues.normalize();
-    cout << eigenValues << endl;
     vpPlot A(1, 700, 700, 1000, 200, "Eigen Curve");
     A.initGraph(0, 2);
     A.setTitle(0, "Eigen values accumulation");

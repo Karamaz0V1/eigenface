@@ -108,6 +108,12 @@ void Eigenfaces::getFaceWithCoordinates(const vpColVector & coordinates, vpMatri
     face = cface.t().reshape(_iheight, _iwidth);
 }
 
+double Eigenfaces::getEQM(const vpImage<unsigned char> & faceReconstructed, int subject, int image) const {
+    vpImage<uchar> face;
+    loadImage(face, subject, image);
+    return keqm(face, faceReconstructed);
+}
+
 void Eigenfaces::getCenterFace(vpMatrix & centerFace, int subject, int image) const {
     centerFace = _centerfaces.getCol((subject - 1) * _nImages + image - 1).t().reshape(_iheight, _iwidth);
 }

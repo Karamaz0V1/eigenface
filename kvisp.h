@@ -20,5 +20,6 @@ void vpMatrixToVpImage(const vpMatrix & matrix, vpImage<unsigned char> & image);
 void vpMatrixNormalize(vpMatrix & matrix);
 void kvpPow2(vpArray2D<double> & array);
 double keqm(const vpArray2D<double> & array1, const vpArray2D<double> & array2);
+double keqm(const vpImage<unsigned char> & array1, const vpImage<unsigned char> & array2);
 
 #endif /* __KVISP_H__ */

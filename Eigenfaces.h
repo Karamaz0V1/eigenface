@@ -22,6 +22,7 @@ class Eigenfaces {
 
         void getFaceCoordinates(vpColVector & coordinates, int subject = 1, int image = 1, int k = 0) const;
         void getFaceWithCoordinates(const vpColVector & coordinates, vpImage<unsigned char> & face) /*const*/;
+        double getEQM(const vpImage<unsigned char> & faceReconstructed, int subject = 1, int image = 1) const;
 
         void getI(vpImage<unsigned char> & I) const;
         void getA(vpImage<unsigned char> & A) const;
