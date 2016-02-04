@@ -26,6 +26,7 @@ void q6();
 void q8();
 void q8r();
 void q10();
+void q11();
 
 //Eigenfaces ef("../img", 36, 9);
 Eigenfaces ef("../img", 10, 10);
@@ -37,7 +38,8 @@ int main( int argc, char* argv[] )
     //q6();
     //q8();
     //q8r();
-    q10();
+    //q10();
+    q11();
 
     return 0;
 }
@@ -219,13 +221,40 @@ void q10() {
     kvpPow2(eigenValues);
     eigenValues = eigenValues.normalize();
     cout << eigenValues << endl;
-    vpPlot A(1, 700, 700, 1000, 200, "Curves");
+    vpPlot A(1, 700, 700, 1000, 200, "Eigen Curve");
     A.initGraph(0, 2);
+    A.setTitle(0, "Eigen values accumulation");
     double sum = 0;
     for (unsigned int i = 0; i < eigenValues.size(); i++) {
         sum += eigenValues[i] / eigenValues.sum();
         //A.plot(0,0,i,eigenValues[i]);
-        A.plot(0,0,i,sum);
+        A.plot(0, 0, i, sum);
+    }
+    cout << "Sum: " << sum << endl;
+    cout << "Euc: " << eigenValues.euclideanNorm() << endl;
+    A.getPixelValue(true);
+}
+
+void q11() {
+    vpMatrix a(10, 10);
+    vpMatrix b(10, 10);
+    a[0][0] = 1;
+    cout << keqm(a, b) << endl;
+    return;
+    vpColVector singularValues;
+    ef.getS(singularValues);
+    vpColVector eigenValues = singularValues;
+    kvpPow2(eigenValues);
+    eigenValues = eigenValues.normalize();
+    cout << eigenValues << endl;
+    vpPlot A(1, 700, 700, 1000, 200, "Eigen Curve");
+    A.initGraph(0, 2);
+    A.setTitle(0, "Eigen values accumulation");
+    double sum = 0;
+    for (unsigned int i = 0; i < eigenValues.size(); i++) {
+        sum += eigenValues[i] / eigenValues.sum();
+        //A.plot(0,0,i,eigenValues[i]);
+        A.plot(0, 0, i, sum);
     }
     cout << "Sum: " << sum << endl;
     cout << "Euc: " << eigenValues.euclideanNorm() << endl;

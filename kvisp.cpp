@@ -6,8 +6,9 @@
  *
  **************************************************************************/
 
-#include "kvisp.h"
+#include <kvisp.h>
 #include <cstring>
+#include <assert.h>
 
 vpColVector vpColVector3(const double x, const double y, const double z) {
     vpColVector cv(3);
@@ -59,4 +60,16 @@ void vpMatrixNormalize(vpMatrix & matrix) {
 void kvpPow2(vpArray2D<double> & array) {
     for (double * it = array.data; it != array.data + array.size(); it++)
         *it = *it * *it;
+}
+
+double keqm(const vpArray2D<double> & array1, const vpArray2D<double> & array2) {
+    assert(array1.size() == array2.size());
+
+    double sum = 0;
+
+    double * j = array2.data;
+    for (double * i = array1.data; i != array1.data + array1.size(); i++, j++)
+        sum += (*i - *j) * (*i - *j);
+
+    return sum / array1.size();
 }
