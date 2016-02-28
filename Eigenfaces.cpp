@@ -114,6 +114,24 @@ double Eigenfaces::getEQM(const vpImage<unsigned char> & faceReconstructed, int 
     return keqm(face, faceReconstructed);
 }
 
+void Eigenfaces::getEk(vpMatrix & Ek, int subject, int image, int k, int K) /*const*/ {
+    // Get test face projection
+    vpMatrix Jp;
+    vpColVector Jcoordinates;
+    getFaceCoordinates(Jcoordinates, subject, image, K);
+    getFaceWithCoordinates(Jcoordinates, Jp);
+
+    // Get ref face projection
+    vpMatrix Jpk;
+    vpColVector Ikcoordinates;
+    getFaceCoordinates(Ikcoordinates, 1, k, K);
+    getFaceWithCoordinates(Ikcoordinates, Jpk);
+
+    // Compute distance
+    Ek = Jp - Jpk;
+    double sEk = keqm(Jp, Jpk);
+}
+
 void Eigenfaces::getCenterFace(vpMatrix & centerFace, int subject, int image) const {
     centerFace = _centerfaces.getCol((subject - 1) * _nImages + image - 1).t().reshape(_iheight, _iwidth);
 }

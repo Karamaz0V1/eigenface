@@ -27,6 +27,7 @@ void q8();
 void q8r();
 void q10();
 void q11();
+void q13();
 
 const int SUBJECTS = 36;
 const int IMAGES = 9;
@@ -248,8 +249,7 @@ void q11() {
 
     int cpt = 0;
     for (int s = 1; s <= SUBJECTS; s++)
-        for (int i = 1; i <= IMAGES; i++) {
-            for (int k = 1; k <= m; k++) {
+        for (int i = 1; i <= IMAGES; i++) { for (int k = 1; k <= m; k++) {
                 vpColVector coordinates;
                 ef.getFaceCoordinates(coordinates, s, i, k);
 
@@ -273,6 +273,12 @@ void q11() {
     cout << eqm << endl;
 
     A.getPixelValue(true);
+}
+
+void q13() {
+    vpMatrix J, Jkp;
+    ef.getFace(J, 1, 1);
+    vpMatrix diff = J - Jkp;
 }
 
 void demo_visp_broken() {
