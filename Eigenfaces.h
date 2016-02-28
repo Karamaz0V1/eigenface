@@ -23,13 +23,15 @@ class Eigenfaces {
         void getFaceCoordinates(vpColVector & coordinates, int subject = 1, int image = 1, int k = 0) const;
         void getFaceWithCoordinates(const vpColVector & coordinates, vpImage<unsigned char> & face) /*const*/;
         double getEQM(const vpImage<unsigned char> & faceReconstructed, int subject = 1, int image = 1) const;
-        void getEk(vpMatrix & Ek, int subject = 1, int image = 1, int k = 1, int K = 20) /*const*/;
+        double getEk(int subject = 1, int image = 1, int k = 1, int K = 20) /*const*/;
 
         // TODO: vpMat access
         void getI(vpImage<unsigned char> & I) const;
         void getA(vpImage<unsigned char> & A) const;
         void getU(vpImage<unsigned char> & U) const;
         void getS(vpColVector & S) const;
+
+        int dbSize() const;
 
     protected:
         void getFace(vpMatrix & face, int subject, int image) const;
@@ -50,6 +52,8 @@ class Eigenfaces {
     private:
         void loadImage(vpImage<unsigned char> & I, int visage, int image) const;
         void loadImage(vpMatrix & I, int visage, int image) const;
+        int subjectIndex(int k) const;
+        int imageIndex(int k) const;
         void initImageSpec();
         void loadDb(int nbSubjects, int nbImages);
         void initMeanFace();

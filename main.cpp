@@ -28,6 +28,7 @@ void q8r();
 void q10();
 void q11();
 void q13();
+void q14();
 
 const int SUBJECTS = 36;
 const int IMAGES = 9;
@@ -41,9 +42,11 @@ int main( int argc, char* argv[] )
     //q3();
     //q6();
     //q8();
-    q8r();
+    //q8r();
     //q10();
-    q11();
+    //q11();
+    //q13();
+    q14();
 
     return 0;
 }
@@ -225,7 +228,7 @@ void q10() {
     vpColVector eigenValues = singularValues;
     kvpPow2(eigenValues);
     eigenValues = eigenValues.normalize();
-    vpPlot A(1, 700, 700, 1000, 200, "Eigen Curve");
+    vpPlot A(1, 700, 1000, 1000, 200, "Eigen Curve");
     A.initGraph(0, 2);
     A.setTitle(0, "Eigen values accumulation");
     double sum = 0;
@@ -276,9 +279,33 @@ void q11() {
 }
 
 void q13() {
-    vpMatrix J, Jkp;
-    ef.getFace(J, 1, 1);
-    vpMatrix diff = J - Jkp;
+    vpMatrix dist(ef.dbSize(), ef.dbSize());
+
+    // Compute distance between ref images
+    for (int i = 0; i < ef.dbSize(); i++) {
+        cout << "Dist between face " << i << " and database..." << endl;
+        for (int k = 0; k < ef.dbSize(); k++) {
+            if (dist[i][k] != 0) continue;
+            double Ek = ef.getEk(0, i, k, 20);
+            dist[i][k] = Ek;
+            dist[k][i] = Ek;
+        }
+    }
+
+    vpImage<uchar> idist;
+    vpMatrixNormalize(dist);
+    vpMatrixToVpImage(dist, idist);
+
+    vpDisplayX disp0(idist,  1000, 100, "Distance");
+    vpDisplay::display(idist);
+    vpDisplay::flush(idist);
+
+    vpImageIo::writePNG(idist, "q13_distance.png");
+
+    vpDisplay::getClick(idist);
+}
+
+void q14() {
 }
 
 void demo_visp_broken() {
