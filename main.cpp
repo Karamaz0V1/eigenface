@@ -286,7 +286,7 @@ void q13() {
         cout << "Dist between face " << i << " and database..." << endl;
         for (int k = 0; k < ef.dbSize(); k++) {
             if (dist[i][k] != 0) continue;
-            double Ek = ef.getEk(0, i, k, 20);
+            double Ek = ef.getEk(0, i, k);
             dist[i][k] = Ek;
             dist[k][i] = Ek;
         }
@@ -306,6 +306,39 @@ void q13() {
 }
 
 void q14() {
+    double sum = 0;
+    double min = numeric_limits<double>::max();
+    double max = numeric_limits<double>::min();
+
+    for (int s = 1; s <= SUBJECTS; s++) {
+        cout << "Compute stats for subject " << s << "..." << endl;
+        for (int i = 1; i <= IMAGES; i++) {
+            for (int k = (s - 1) * IMAGES; k < (s - 1) * IMAGES + IMAGES; k++) {
+                double Ek = ef.getEk(s, i, k);
+                sum += Ek;
+                if (Ek < min && Ek != 0) min = Ek;
+                if (Ek > max) max = Ek;
+            }
+        }
+    }
+
+    cout << "Ref. mean error: " << sqrt(sum / (SUBJECTS * IMAGES)) << " min: " << sqrt(min) << " max: " << sqrt(max) << endl;
+
+    for (int s = 1; s <= SUBJECTS; s++) {
+        cout << "Compute stats for subject " << s << "..." << endl;
+        for (int i = 1; i <= IMAGES; i++) {
+            for (int k = 0; k < ef.dbSize(); k++) {
+                if ( k > (s - 1) * IMAGES && k < (s - 1) * IMAGES + IMAGES) continue;
+                double Ek = ef.getEk(s, i, k);
+                sum += Ek;
+                if (Ek < min && Ek != 0) min = Ek;
+                if (Ek > max) max = Ek;
+            }
+        }
+    }
+
+    cout << "Test mean error: " << sqrt(sum / (SUBJECTS * IMAGES)) << " min: " << sqrt(min) << " max: " << sqrt(max) << endl;
+
 }
 
 void demo_visp_broken() {
