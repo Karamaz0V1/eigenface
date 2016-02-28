@@ -29,6 +29,7 @@ void q10();
 void q11();
 void q13();
 void q14();
+void q15();
 
 const int SUBJECTS = 36;
 const int IMAGES = 9;
@@ -46,7 +47,8 @@ int main( int argc, char* argv[] )
     //q10();
     //q11();
     //q13();
-    q14();
+    //q14();
+    q15();
 
     return 0;
 }
@@ -310,35 +312,75 @@ void q14() {
     double min = numeric_limits<double>::max();
     double max = numeric_limits<double>::min();
 
+    int cpt = 0;
     for (int s = 1; s <= SUBJECTS; s++) {
         cout << "Compute stats for subject " << s << "..." << endl;
         for (int i = 1; i <= IMAGES; i++) {
             for (int k = (s - 1) * IMAGES; k < (s - 1) * IMAGES + IMAGES; k++) {
-                double Ek = ef.getEk(s, i, k);
-                sum += Ek;
+                double Ek = sqrt(ef.getEk(s, i, k));
+                sum += Ek; cpt++;
                 if (Ek < min && Ek != 0) min = Ek;
                 if (Ek > max) max = Ek;
             }
         }
     }
 
-    cout << "Ref. mean error: " << sqrt(sum / (SUBJECTS * IMAGES)) << " min: " << sqrt(min) << " max: " << sqrt(max) << endl;
+    cout << "Ref. mean error: " << sum / cpt << " min: " << min << " max: " << max << endl;
 
+    cpt = 0;
     for (int s = 1; s <= SUBJECTS; s++) {
         cout << "Compute stats for subject " << s << "..." << endl;
         for (int i = 1; i <= IMAGES; i++) {
             for (int k = 0; k < ef.dbSize(); k++) {
-                if ( k > (s - 1) * IMAGES && k < (s - 1) * IMAGES + IMAGES) continue;
-                double Ek = ef.getEk(s, i, k);
-                sum += Ek;
+                if ( k >= (s - 1) * IMAGES && k < (s - 1) * IMAGES + IMAGES) continue;
+                double Ek = sqrt(ef.getEk(s, i, k));
+                sum += Ek; cpt++;
                 if (Ek < min && Ek != 0) min = Ek;
                 if (Ek > max) max = Ek;
             }
         }
     }
 
-    cout << "Test mean error: " << sqrt(sum / (SUBJECTS * IMAGES)) << " min: " << sqrt(min) << " max: " << sqrt(max) << endl;
+    cout << "Test mean error: " << sum / cpt << " min: " << min << " max: " << max << endl;
 
+}
+
+void q15() {
+    double omg = pow(0.15, 2);
+    vpColVector positive(ef.dbSize());
+    vpColVector false_positive(ef.dbSize());
+    vpColVector false_negative(ef.dbSize());
+    vpPlot A(1, 700, 1000, 1000, 200, "Recognition");
+    A.initGraph(0, 3);
+    A.setTitle(0, "Recognition success depending on K");
+    for (int s = 1; s <= SUBJECTS; s++) {
+        for (int i = 1; i <=IMAGES; i++) {
+            for (int k = 0; k < ef.dbSize(); k++) {
+                cout << "Recognition test s" << s << " i" << i << " with k=" << k << "..." << endl;
+                for (int K = 0; K < ef.dbSize(); K++) {
+                    double Ek = ef.getEk(s, i, k, K);
+                    if (Ek < omg)
+                        if (k >= (s - 1) * IMAGES && k < (s - 1) * IMAGES + IMAGES)
+                            positive[K]++;
+                        else
+                            false_positive[K]++;
+                    else
+                        if (k >= (s - 1) * IMAGES && k < (s - 1) * IMAGES + IMAGES)
+                            false_negative[K]++;
+                }
+
+                A.resetPointList(0);
+                for (int K = 0; K < ef.dbSize(); K++) {
+                    A.plot(0, 0, K, positive[K]);
+                    A.plot(0, 1, K, false_positive[K]);
+                    A.plot(0, 2, K, false_negative[K]);
+                }
+            }
+        }
+    }
+
+    //A.plot(0, 0, i, sum);
+    A.getPixelValue(true);
 }
 
 void demo_visp_broken() {
