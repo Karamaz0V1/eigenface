@@ -137,7 +137,7 @@ Nous affichons les résultats de ces reconstruction en faisant varier le paramè
 le nombre d'eigenface à prendre en compte lors de la transformation dans le sous-espace.
 Le vecteur de coordonnée est donc de taille $K$. L'organisation de la matrice $U$ lors de la SVD concentre les
 informations importantes dans les premières eigenfaces 
--- résultats semblables à la concentration des basses fréquence lors d'une DCT -- 
+-- ce qui est un résultat semblable à la concentration des basses fréquence lors d'une DCT -- 
 ce qui nous permet de transmettre le maximum d'informations possible pour un $K$ donné.
 
 Les résultats de nos reconstructions sont divisés en trois classes~:
@@ -358,14 +358,14 @@ faux positifs, et donc le manque de robustesse de cette méthode avec un $K$ fai
 Avec $K=20$, concernant la distance entre deux images d'un même sujet nous avons obtenus des distances de
 l'ordre de 0.076 en moyenne, 
 avec un minimum de 0.010 
---sans compter les identification d'une même image--
+-- sans compter les identification d'une même image --
 et un maximum de 0.192.
 Concernant la distance entre deux images de sujets différents, nous avons obtenus une 
 distance moyenne de 0.183 
 avec un minimum de 0.011
 et un maximum de 0.328.
 
-On peut déjà en déduir que quel que soit le $\theta$ choisi, il y aura des faux positifs.
+On peut déjà en déduire que quel que soit le $\theta$ choisi, il y aura des faux positifs.
 Nous avons choisi $\theta = 0.100$ ce qui correspond à une identification plutôt stricte.
 %Ref. mean error: 0.0764552 min: 0.0102063 max: 0.192549
 %Test mean error: 0.1833690 min: 0.0102063 max: 0.328414
@@ -384,10 +384,10 @@ Cette courbe est visible figure \ref{q15}.
 
 La figure se compose de trois courbes~:
 \begin{itemize}
-    \item La courbe bleu représente le nombre de visage reconnus (Positif).
-    \item La courbe bleu représente le nombre de visage non reconnus pourtant appartenant à la même personne
+    \item La courbe bleu représente le nombre de visages reconnus (Positif).
+    \item La courbe rouge représente le nombre de visages non reconnus pourtant appartenant à la même personne
         (Faux-négatif).
-    \item La courbe verte représente le nombre de visage faussement reconnus (Faux-positif).
+    \item La courbe verte représente le nombre de visages faussement reconnus (Faux-positif).
 \end{itemize}
 
 Premièrement, ces courbes démontre que nous avons choisi un $\theta$ beaucoup trop strict, dont le choix était
@@ -397,8 +397,8 @@ relativement faible. Avec $K=50$ nous devrions avoir une bonne reconnaissance et
 
 \section{Conclusion}
 
-La méthode des reconnaissance de visage à l'aide des eigenfaces nous permet d'effectuer rapidement l'
-identification d'un visage connu, à défaut de réel robustesse. 
+La méthode des reconnaissance de visages à l'aide des eigenfaces nous permet d'effectuer l'
+identification d'un visage connu rapidement, à défaut de réelle robustesse. 
 La décomposition en valeurs propres, ou <<visages propres>> nous permet de créer un sous-espace
 d'identification permettant d'accélérer énormément les temps de calculs.
 
