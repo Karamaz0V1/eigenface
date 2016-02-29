@@ -346,7 +346,7 @@ void q14() {
 }
 
 void q15() {
-    double omg = pow(0.15, 2);
+    double omg = pow(0.11, 2);
     vpColVector positive(ef.dbSize());
     vpColVector false_positive(ef.dbSize());
     vpColVector false_negative(ef.dbSize());
