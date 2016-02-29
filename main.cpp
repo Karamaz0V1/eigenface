@@ -28,6 +28,8 @@ void q8r();
 void q10();
 void q11();
 void q13();
+void q14();
+void q15();
 
 const int SUBJECTS = 36;
 const int IMAGES = 9;
@@ -41,9 +43,12 @@ int main( int argc, char* argv[] )
     //q3();
     //q6();
     //q8();
-    q8r();
+    //q8r();
     //q10();
-    q11();
+    //q11();
+    //q13();
+    //q14();
+    q15();
 
     return 0;
 }
@@ -225,7 +230,7 @@ void q10() {
     vpColVector eigenValues = singularValues;
     kvpPow2(eigenValues);
     eigenValues = eigenValues.normalize();
-    vpPlot A(1, 700, 700, 1000, 200, "Eigen Curve");
+    vpPlot A(1, 700, 1000, 1000, 200, "Eigen Curve");
     A.initGraph(0, 2);
     A.setTitle(0, "Eigen values accumulation");
     double sum = 0;
@@ -276,9 +281,106 @@ void q11() {
 }
 
 void q13() {
-    vpMatrix J, Jkp;
-    ef.getFace(J, 1, 1);
-    vpMatrix diff = J - Jkp;
+    vpMatrix dist(ef.dbSize(), ef.dbSize());
+
+    // Compute distance between ref images
+    for (int i = 0; i < ef.dbSize(); i++) {
+        cout << "Dist between face " << i << " and database..." << endl;
+        for (int k = 0; k < ef.dbSize(); k++) {
+            if (dist[i][k] != 0) continue;
+            double Ek = ef.getEk(0, i, k);
+            dist[i][k] = Ek;
+            dist[k][i] = Ek;
+        }
+    }
+
+    vpImage<uchar> idist;
+    vpMatrixNormalize(dist);
+    vpMatrixToVpImage(dist, idist);
+
+    vpDisplayX disp0(idist,  1000, 100, "Distance");
+    vpDisplay::display(idist);
+    vpDisplay::flush(idist);
+
+    vpImageIo::writePNG(idist, "q13_distance.png");
+
+    vpDisplay::getClick(idist);
+}
+
+void q14() {
+    double sum = 0;
+    double min = numeric_limits<double>::max();
+    double max = numeric_limits<double>::min();
+
+    int cpt = 0;
+    for (int s = 1; s <= SUBJECTS; s++) {
+        cout << "Compute stats for subject " << s << "..." << endl;
+        for (int i = 1; i <= IMAGES; i++) {
+            for (int k = (s - 1) * IMAGES; k < (s - 1) * IMAGES + IMAGES; k++) {
+                double Ek = sqrt(ef.getEk(s, i, k));
+                sum += Ek; cpt++;
+                if (Ek < min && Ek != 0) min = Ek;
+                if (Ek > max) max = Ek;
+            }
+        }
+    }
+
+    cout << "Ref. mean error: " << sum / cpt << " min: " << min << " max: " << max << endl;
+
+    cpt = 0;
+    for (int s = 1; s <= SUBJECTS; s++) {
+        cout << "Compute stats for subject " << s << "..." << endl;
+        for (int i = 1; i <= IMAGES; i++) {
+            for (int k = 0; k < ef.dbSize(); k++) {
+                if ( k >= (s - 1) * IMAGES && k < (s - 1) * IMAGES + IMAGES) continue;
+                double Ek = sqrt(ef.getEk(s, i, k));
+                sum += Ek; cpt++;
+                if (Ek < min && Ek != 0) min = Ek;
+                if (Ek > max) max = Ek;
+            }
+        }
+    }
+
+    cout << "Test mean error: " << sum / cpt << " min: " << min << " max: " << max << endl;
+
+}
+
+void q15() {
+    double omg = pow(0.11, 2);
+    vpColVector positive(ef.dbSize());
+    vpColVector false_positive(ef.dbSize());
+    vpColVector false_negative(ef.dbSize());
+    vpPlot A(1, 700, 1000, 1000, 200, "Recognition");
+    A.initGraph(0, 3);
+    A.setTitle(0, "Recognition success depending on K");
+    for (int s = 1; s <= SUBJECTS; s++) {
+        for (int i = 1; i <=IMAGES; i++) {
+            for (int k = 0; k < ef.dbSize(); k++) {
+                cout << "Recognition test s" << s << " i" << i << " with k=" << k << "..." << endl;
+                for (int K = 0; K < ef.dbSize(); K++) {
+                    double Ek = ef.getEk(s, i, k, K);
+                    if (Ek < omg)
+                        if (k >= (s - 1) * IMAGES && k < (s - 1) * IMAGES + IMAGES)
+                            positive[K]++;
+                        else
+                            false_positive[K]++;
+                    else
+                        if (k >= (s - 1) * IMAGES && k < (s - 1) * IMAGES + IMAGES)
+                            false_negative[K]++;
+                }
+
+                A.resetPointList(0);
+                for (int K = 0; K < ef.dbSize(); K++) {
+                    A.plot(0, 0, K, positive[K]);
+                    A.plot(0, 1, K, false_positive[K]);
+                    A.plot(0, 2, K, false_negative[K]);
+                }
+            }
+        }
+    }
+
+    //A.plot(0, 0, i, sum);
+    A.getPixelValue(true);
 }
 
 void demo_visp_broken() {

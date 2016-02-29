@@ -114,7 +114,12 @@ double Eigenfaces::getEQM(const vpImage<unsigned char> & faceReconstructed, int 
     return keqm(face, faceReconstructed);
 }
 
-void Eigenfaces::getEk(vpMatrix & Ek, int subject, int image, int k, int K) /*const*/ {
+double Eigenfaces::getEk(int subject, int image, int k, int K) /*const*/ {
+    if (subject == 0) {
+        subject = subjectIndex(image);
+        image = imageIndex(image);
+    }
+
     // Get test face projection
     vpMatrix Jp;
     vpColVector Jcoordinates;
@@ -124,12 +129,11 @@ void Eigenfaces::getEk(vpMatrix & Ek, int subject, int image, int k, int K) /*co
     // Get ref face projection
     vpMatrix Jpk;
     vpColVector Ikcoordinates;
-    getFaceCoordinates(Ikcoordinates, 1, k, K);
+    getFaceCoordinates(Ikcoordinates, subjectIndex(k), imageIndex(k), K);
     getFaceWithCoordinates(Ikcoordinates, Jpk);
 
     // Compute distance
-    Ek = Jp - Jpk;
-    double sEk = keqm(Jp, Jpk);
+    return keqm(Jp, Jpk);
 }
 
 void Eigenfaces::getCenterFace(vpMatrix & centerFace, int subject, int image) const {
@@ -213,4 +217,16 @@ void Eigenfaces::initImageSpec() {
 
 void Eigenfaces::getS(vpColVector & S) const {
     S = _eigenvalues;
+}
+
+int Eigenfaces::dbSize() const {
+    return _nImages * _nSubjects;
+}
+
+int Eigenfaces::subjectIndex(int k) const {
+    return floor(k / _nImages) + 1;
+}
+
+int Eigenfaces::imageIndex(int k) const {
+    return k % _nImages + 1;
 }
