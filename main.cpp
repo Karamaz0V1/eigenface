@@ -39,15 +39,15 @@ Eigenfaces ef("../img", SUBJECTS, IMAGES);
 
 int main( int argc, char* argv[] )
 {
-    //q0();
-    //q3();
-    //q6();
-    //q8();
-    //q8r();
-    //q10();
-    //q11();
-    //q13();
-    //q14();
+    q0();
+    q3();
+    q6();
+    q8();
+    q8r();
+    q10();
+    q11();
+    q13();
+    q14();
     q15();
 
     return 0;
@@ -71,8 +71,8 @@ void q3() {
 
     vpImage<uchar> icenter, icenter1, icenter2;
     ef.getCenterFace(icenter);
-    ef.getCenterFace(icenter1, 10);
-    ef.getCenterFace(icenter2, 20);
+    ef.getCenterFace(icenter1, 1, 10);
+    ef.getCenterFace(icenter2, 1, 20);
 
     vpDisplayX disp0(imean, 1000, 100, "mean face");
     vpDisplayX disp1(iface, 1100, 100, "face");
@@ -245,8 +245,7 @@ void q10() {
 }
 
 void q11() {
-    int m = (SUBJECTS - 1) * (IMAGES - 1);
-    vpColVector eqm(m + 1);
+    vpColVector eqm(ef.dbSize());
 
     vpPlot A(1, 700, 1000, 1000, 200, "Mean error");
     A.initGraph(0, 1);
@@ -254,7 +253,8 @@ void q11() {
 
     int cpt = 0;
     for (int s = 1; s <= SUBJECTS; s++)
-        for (int i = 1; i <= IMAGES; i++) { for (int k = 1; k <= m; k++) {
+        for (int i = 1; i <= IMAGES; i++) { 
+            for (int k = 1; k < ef.dbSize(); k++) {
                 vpColVector coordinates;
                 ef.getFaceCoordinates(coordinates, s, i, k);
 
@@ -274,7 +274,7 @@ void q11() {
                 A.plot(0, 0, k, eqmdisp[k]);
         }
 
-    eqm /= m;
+    eqm /= ef.dbSize();
     cout << eqm << endl;
 
     A.getPixelValue(true);
